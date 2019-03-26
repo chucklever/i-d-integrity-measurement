@@ -488,7 +488,7 @@ there is only remote access to IMA metadata.
 </section>
 
 <section
- title="Instantiating File Provenance Information"
+ title="Instantiating IMA Metadata"
  anchor="section:548BF993-DE7D-4752-80C5-6628073606BE">
 <t>
 Once a file is written, IMA metadata is generated
@@ -513,7 +513,7 @@ fresh IMA metadata.
 </t>
 
 <section
- title="Authorizing Updates to File Provenance Information"
+ title="Authorizing Updates to IMA Metadata"
  anchor="C17FEFF5-F9F8-46C4-AC3D-1B04DF704752">
 <t>
 A participating server should ensure
