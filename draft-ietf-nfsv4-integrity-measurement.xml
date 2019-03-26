@@ -2,12 +2,13 @@
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [ ]>
 <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
 
-<?rfc strict="true" ?>
-<?rfc toc="true"?>
-<?rfc symrefs="true"?>
-<?rfc sortrefs="true" ?>
-<?rfc compact="true" ?>
-<?rfc subcompact="false" ?>
+<?rfc strict="yes"?>
+<?rfc toc="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc docmapping="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
 
 <rfc
  docName="draft-ietf-nfsv4-integrity-measurement-latest"
@@ -17,18 +18,18 @@
 
 <front>
 
-<title abbrev="File Provenance for NFS">
-File Content Provenance for Network File System version 4
+<title abbrev="IMA over NFS">
+Integrity Measurement for Network File System version 4
 </title>
 
 <author initials="C.L." surname="Lever" fullname="Charles Lever">
 <organization abbrev="Oracle">Oracle Corporation</organization>
 <address>
 <postal>
-<street>1015 Granger Avenue</street>
-<city>Ann Arbor</city>
-<region>MI</region>
-<code>48104</code>
+<street></street>
+<city></city>
+<region></region>
+<code></code>
 <country>United States of America</country>
 </postal>
 <email>chuck.lever@oracle.com</email>
@@ -43,12 +44,12 @@ File Content Provenance for Network File System version 4
 <t>
 This document specifies an OPTIONAL extension
 to NFS version 4 minor version 2
-that enables file provenance information
+that enables Linux Integrity Measurement Architecture metadata (IMA)
 to be conveyed between NFS version 4.2 servers and clients.
-File provenance information
+Integrity measurement
 authenticates the creator of a file's content and
 helps guarantee the content's integrity
-from creation to use.
+end-to-end from creation to use.
 </t>
 </abstract>
 
@@ -99,82 +100,78 @@ since it was created,
 perhaps even after several generations of copies
 have been made of the file's content.
 </t>
-<t>
-This guarantee can be accomplished
-by separately preserving a keyed hash,
-such as an HMAC
-<xref target="RFC2104"/>,
-of a file's content.
-The checksum and its signature are verified as the file's content
-is read into memory immediately before it is used.
-If verification fails, access to the file's content is prevented.
-The hash is updated and re-signed
-only when the file's content is legitimately modified.
-</t>
-<t>
-Unlike traditional integrity management schemes,
-the hash is not replaced every time a file is copied.
-Instead, the signed checksum is copied along with file content
-and presented whenever the content is about to be used.
-</t>
 
 <section
- title="Architecture and Terminology"
- anchor="section:615E5ADC-86C8-42BF-8234-613E1BBC787D">
-<t>
-A keyed hash authenticates the identity of the last
-modifier of a file's content
-and
-serves as a strong check of the content's integrity.
-For the purposes of this document,
-we refer to this metadata using the generic term "file provenance information".
-</t>
-<t>
-File provenance information is generated and signed
-by a "provenance authority",
-and then associated with each file using special tools.
-</t>
-<t>
-A security module separate from the file system stack
-specifies the format of the file provenance information
-and
-enforces a policy for utilizing it to determine
-when a protected file's content is safe to use on the local system.
-For the purposes of this document,
-we refer to this module as a "provenance assessor",
-and the policy it uses as the "provenance assessment policy".
-</t>
-<t>
-Provenance assessment is typically performed at the point of content use.
-The file and storage system play no part in provenance assessment decisions.
-NFS acts as only a conduit by which file provenance information
-and file content move between storage on an NFS server
-and the provenance assessor where that content is to be accessed.
-NFS peers accessing a set of shared files must all agree on
-the at-rest file provenance information format.
-The format is specified by the provenance assessor
-and is therefore not described in this document.
-</t>
+ title="The Linux Integrity Measurement Architecture"
+ anchor="section:F09E4A19-531B-4771-A5AD-42B14E0BC030">
 <t>
 <eref
  target="http://downloads.sf.net/project/linux-ima/linux-ima/Integrity_overview.pdf">
 The Linux Integrity Measurement Architecture (IMA)
 </eref>
-is an example of a mechanism that provides
-a full provenance assessment service.
-The protocol extension in this document
-enables
-the storage and use of file provenance information
-so that provenance assessment can occur at point-of-use
+provides assurance
+that the content of files is unaltered and authentic to what was
+originally written to those files.
+The primary goal is to detect when
+a remote attacker,
+a local attacker, or
+unintentional platform behavior
+has modified the content of a file
+either in transit or at rest.
+</t>
+<t>
+A keyed hash
+(e.g., an HMAC
+<xref target="RFC2104"/>)
+authenticates the identity of the last modifier of a file's content
+and
+serves as a strong check of the content's integrity.
+For the purposes of this document,
+we refer to this hash as "IMA metadata".
+Such metadata is generated and signed
+by a trusted authority
+and then associated with each file using special tools.
+</t>
+<t>
+Each hash and its signature are verified as the file's content
+is read into memory immediately before it is used.
+If verification fails, access to the file's content is prevented.
+A security module separate from the file system
+specifies the format of the metadata,
+measures file content,
+and
+enforces a policy for determining
+when file content is safe to use on the local system.
+For the purposes of this document,
+we refer to this module as the "integrity assessor"
+and the policy it uses as the "appraisal policy".
+</t>
+<t>
+Appraisal is typically performed at the point of content use.
+The file and storage system play no part in measurement or appraisal.
+The file system acts only as a conduit by which IMA metadata
+and file content move between storage on an NFS server
+and the integrity assessor module on the host where that content is to be used.
+</t>
+<t>
+NFS peers accessing a set of shared files must all agree on
+the IMA metadata format.
+The format is specified by the integrity assessor module
+and is therefore not described in this document.
+The protocol extension in this document enables
+the storage and use of IMA metadata
+so that measurement and appraisal can occur at point-of-use
 on NFS clients.
 The extension does not provide a full assessment mechanism.
 </t>
 <t>
+<eref
+ target="https://trustedcomputinggroup.org/wp-content/uploads/Trusted-Platform-Module-Summary_04292008.pdf">
 A Trusted Platform Module
-<xref target="TPM-SUM"/>
-can seal the key material used to sign and verify file content.
+</eref>
+can seal key material used to sign and verify file content.
 Distributing and protecting such key material is outside the scope
-of the OPTIONAL extension specified in this document.
+of the extension specified in this document.
 </t>
 </section>
 
@@ -244,14 +241,14 @@ sed -n -e 's:^ */// ::p' -e 's:^ *///$::p'
 </figure>
 </t>
 <t>
-That is, if this document is in a file called "provenance-extension.txt"
+That is, if this document is in a file called "ima-extension.txt"
 then the reader can do the following to extract an XDR description file:
 <figure align="left">
 <artwork xml:space="preserve" align="left">
 &lt;CODE BEGINS&gt;
 
 sed -n -e 's:^ */// ::p' -e 's:^ *///$::p'
-     &lt; provenance-extension.txt &gt; ima.x
+     &lt; ima-extension.txt &gt; ima.x
 
 &lt;CODE ENDS&gt;
 </artwork>
@@ -270,7 +267,7 @@ This will result in a ready-to-compile XDR file.
 </section>
 
 <section
- title="Managing File Provenance Information on NFS Files"
+ title="Managing IMA Metadata on NFS Files"
  anchor="section:42398ABB-62B5-484C-A02E-D7F0FDA7F4BA">
 
 <section
@@ -279,14 +276,14 @@ This will result in a ready-to-compile XDR file.
 <t>
 This section defines a new data type to encapsulate
 and a new OPTIONAL attribute to access and update
-file provenance information associated with a particular file.
+IMA metadata associated with a particular file.
 </t>
 <t>
-To enable a single file provenance information payload
+To enable a single IMA metadata payload
 to be retrieved or updated via a single RPC,
 and to constrain the transport resources required for the
 operations defined in this section,
-the length of file provenance information MUST NOT exceed 4096 bytes in length.
+the length of IMA metadata MUST NOT exceed 4096 bytes in length.
 </t>
 <t>
 When an NFS version 4.2 server does not recognize,
@@ -302,80 +299,70 @@ in Section 4.3 of
 &lt;CODE BEGINS&gt;
 
    /// /*
-   ///  * Copyright (c) 2018 IETF Trust and the person identified
+   ///  * Copyright (c) 2019 IETF Trust and the person identified
    ///  * as author of the code.  All rights reserved.
    ///  *
    ///  * The author of the code is: C. Lever
    ///  */
    ///
-   /// struct file_prov4 {
-   ///         uint32_t                 fpv_type;
-   ///         opaque                   fpv_data&lt;&gt;;
-   /// };
-   ///
    /// %/*
-   /// % * New For File Provenance Information
+   /// % * New For Linux IMA support
    /// % */
-   /// typedef file_prov4               fattr4_file_provenance;
+   /// opaque                           ima_data&lt;4096&gt;;
    ///
-   /// const FATTR4_FILE_PROVENANCE = XXX;   /* to be assigned */
+   /// const FATTR4_LINUX_IMA = XXX;    /* to be assigned */
 
 &lt;CODE ENDS&gt;
 </artwork>
 </figure>
 
 <!-- RFC Editor:
-Please replace XXX with the FATTR4 number assigned by the nfsv4 WG
+Please replace XXX with the FATTR4 number assigned by the NFSV4 WG
 -->
 
 </section>
 
 <section
- title="Storing File Provenance Information"
+ title="Storing IMA Metadata"
  anchor="section:7167B240-32ED-47DB-903E-874A3A43FF9B">
 <t>
-An NFS version 4.2 client stores file provenance information
+An NFS version 4.2 client stores IMA metadata
 by sending a SETATTR operation
-that specifies the FATTR4_FILE_PROVENANCE attribute
-and an fpv_type,
+that specifies the FATTR4_LINUX_IMA attribute,
 targeting the file object
-associated with the file provenance information to be stored.
-This attribute completely replaces any previous one with the
-same fpv_type field.
+associated with the metadata to be stored.
+This attribute completely replaces any previous one.
 </t>
 <t>
-To remove a file provenance attribute from a file,
-the client sends a FATTR4_FILE_PROVENANCE attribute
+To remove IMA metadata from a file,
+the client sends a FATTR4_LINUX_IMA attribute
 whose length is zero.
 Modifying the file in any other way MUST NOT alter or remove
-FATTR4_FILE_PROVENANCE attributes.
+FATTR4_LINUX_IMA attributes.
 </t>
 <t>
 When a SETATTR is presented to an NFS version 4.2 server
 with a credential that is not authorized
-to replace a FATTR4_FILE_PROVENANCE attribute,
+to replace a FATTR4_LINUX_IMA attribute,
 the server MUST respond with NFS4ERR_ACCESS.
 </t>
 <t>
 When a SETATTR is presented to an NFS version 4.2 server
-with a fattr4_file_provenance field
-whose length is larger than the maximum size specified in
-<xref target="table:4858AC9C-1B46-40C5-87CF-A84EB78F5365"/>
-for that fpv_type,
+with a fattr4_linux_ima field
+whose length is larger than 4096 bytes,
 the server MUST respond with NFS4ERR_INVAL.
 </t>
 <t>
 When a SETATTR is presented to an NFS version 4.2 server
 and the target object resides in a file system
-which supports FATTR4_FILE_PROVENANCE
-but the object does not support FATTR4_FILE_PROVENANCE attributes,
+which supports FATTR4_LINUX_IMA
+but the object itself does not support the FATTR4_LINUX_IMA attribute,
 the server MUST respond with NFS4ERR_WRONGTYPE.
 </t>
 <t>
 When a SETATTR is presented to an NFS version 4.2 server
 but the target object resides in a file system which does not
-support FATTR4_FILE_PROVENANCE
-or does not support the format associated with the specified fpv_type,
+support the FATTR4_LINUX_IMA attribute,
 the server MUST respond with NFS4ERR_ATTRNOTSUPP.
 </t>
 <t>
@@ -386,47 +373,46 @@ found in Section 18.30 of
 </section>
 
 <section
- title="Retrieving File Provenance Information"
+ title="Retrieving IMA Metadata"
  anchor="section:3F3277B1-50F2-4317-9707-1A27FE3B0112">
 <t>
-An NFS version 4.2 client retrieves file provenance information
-by retrieving the FATTR4_FILE_PROVENANCE attribute
+An NFS version 4.2 client retrieves IMA metadata
+by retrieving the FATTR4_LINUX_IMA attribute
 via a GETATTR operation,
-specifying an fpv_type and the file handle of
-the file object associated with the information to be retrieved.
+specifying the file handle of the file object
+associated with the metadata to be retrieved.
 This information may have been computed and signed
 previously on this client or by some other agent.
 </t>
 <t>
 When a GETATTR is presented to an NFS version 4.2 server
 and the target object resides in a file system
-which supports FATTR4_FILE_PROVENANCE
-but the object does not support FATTR4_FILE_PROVENANCE attributes,
+which supports the FATTR4_LINUX_IMA attribute
+but the object does not support the FATTR4_LINUX_IMA attribute,
 the server MUST respond with NFS4ERR_WRONGTYPE.
 </t>
 <t>
 When a GETATTR is presented to an NFS version 4.2 server
 but the target object resides in a file system which does not
-support FATTR4_FILE_PROVENANCE
-or does not support the format associated with the specified fpv_type,
+support FATTR4_LINUX_IMA,
 this does not result in an error and
-the FATTR4_FILE_PROVENANCE attribute bit is clear in the server's
-response.
+the FATTR4_FILE_PROVENANCE attribute bit is cleared
+in the server's response.
 </t>
 <t>
-Otherwise, if the target object supports FATTR4_FILE_PROVENANCE
-and there is no file provenance information is available for the
+Otherwise, if the target object supports FATTR4_LINUX_IMA
+and there is no IMA metadata is available for the
 target object,
-the server returns a FATTR4_FILE_PROVENANCE attribute
+the server returns a FATTR4_LINUX_IMA attribute
 whose length is zero.
 </t>
 <t>
-Provenance assessors operate after file content has been delivered
+Integrity assessment occurs after file content has been delivered
 but immediately before that content is to be used.
-To enable provenance assessors on NFS clients to verify file
-provenance information, NFS version 4.2 servers do not
-prevent access to file content if they have a local provenance assessor
-and it indicates that provenance verification has failed.
+To enable integrity assessment on NFS clients to verify
+IMA metadata, NFS version 4.2 servers should not
+prevent access to file content if they have a local appraisal policy
+and it indicates that integrity verification has failed.
 </t>
 <t>
 A detailed description of the GETATTR operation can be
@@ -451,25 +437,27 @@ To aid the discussion in this section, we define a few handy terms:
 A "participating client" is an NFS version 4.2 client that
 supports the OPTIONAL extension described in this document
 and
-employs a provenance assessor.
+employs a integrity assessor module.
 </t>
 <t>
 A "non-participating client" is an NFS version 4.2 client that
 does not support the OPTIONAL extension described in this document
 or
-does not employ a provenance assessor.
+does not employ a integrity assessor module.
 </t>
 <t>
 A "participating server" is an NFS version 4.2 server that
 supports the OPTIONAL extension described in this document
 and
-its shared filesystems can store file provenance information.
+its shared filesystems can store IMA metadata.
+A participating server is not required to implement
+an integrity assessor module.
 </t>
 <t>
 A "non-participating server" is an NFS version 4.2 server that
 does not support the OPTIONAL extension described in this document
 or
-its shared filesystems are not capable of storing file provenance information.
+its shared filesystems are not capable of storing IMA metadata.
 </t>
 </list>
 </t>
@@ -479,21 +467,21 @@ on participating peers:
 <list style="symbols">
 <t>
 A "full-function client" is a participating client that
-supports updating remote file provenance information.
+supports updating remote IMA metadata.
 </t>
 <t>
 A "fetch-only client" is a participating client that
-does not support modifying file provenance information
+does not support modifying IMA metadata
 on a participating server.
 </t>
 <t>
 A "full-function server" is a participating server that
-supports updating file provenance information
+supports updating IMA metadata
 that resides on local shared file systems.
 </t>
 <t>
 A "store-only server" is a participating server where
-there is only remote access to file provenance information.
+there is only remote access to IMA metadata.
 </t>
 </list>
 </t>
@@ -503,25 +491,25 @@ there is only remote access to file provenance information.
  title="Instantiating File Provenance Information"
  anchor="section:548BF993-DE7D-4752-80C5-6628073606BE">
 <t>
-Once a file is written, file provenance information is generated
-and signed by an appropriate provenance authority.
+Once a file is written, IMA metadata is generated
+and signed by an appropriate trust authority.
 Using the OPTIONAL extension specified in this document,
 the information can be associated with a file
 on either a full-function server or client using
-a tool with appropriate privileges that writes the provenance information
+a tool with appropriate privileges that writes IMA metadata
 to the shared file system.
 When using a store-only server, only a full-function client
-can place file provenance information in the shared file system.
+can place IMA metadata in the shared file system.
 </t>
 <t>
-Typically, once file provenance information is associated with a file,
+Typically, once IMA metadata is associated with a file,
 the file's content is essentially immutable, even if the file
 has write permissions.
 This is because changing the content without updating the associated
-file provenance information will make the content inaccessible,
-depending on the provenance assessment policy in effect.
+IMA metadata will make the content inaccessible,
+depending on the appraisal policy in effect.
 Thus updating the file content usually requires generating
-fresh file provenance information.
+fresh IMA metadata.
 </t>
 
 <section
@@ -529,11 +517,13 @@ fresh file provenance information.
  anchor="C17FEFF5-F9F8-46C4-AC3D-1B04DF704752">
 <t>
 A participating server should ensure
-that modifications to file provenance information are done
+that modifications to IMA metadata are done
 only by appropriately authorized agents.
-Such agents usually include only the owner of a file
-and
+Such agents usually include only
 agents with super-user privileges.
+The NFS server MAY confirm that the new IMA metadata
+actually verifies the file content correctly before
+storing it.
 </t>
 </section>
 
@@ -547,22 +537,21 @@ Because the protocol extension described herein is OPTIONAL,
 clients and servers that support it must necessarily interact
 with clients and servers that do not support it.
 To set the stage for a discussion of interactions that might occur,
-consider the following possible simple provenance assessment policies
-that might be adopted by a provenance assessor
-(actual polices are left to provenance assessors):
+consider the following possible simple appraisal policies
+that might be adopted by an integrity assessment module:
 <list style="hanging">
 <t hangText="Strict:">
-Access is prevented to a file's content if the file has no provenance information
-or if the provenance information fails to verify the file content.
+Access is prevented to a file's content if the file has no IMA metadata
+or if the extant IMA metadata fails to verify the file content.
 Otherwise access to the file's content is not prevented.
 </t>
 <t hangText="Audit:">
 Access to a file's content is never prevented.
-Warnings are reported when a file has no provenance information
-or when existing provenance information fails to verify the file's content.
+Warnings are reported when a file has no IMA metadata
+or when extant IMA metadata fails to verify the file's content.
 </t>
 <t hangText="Disabled:">
-Access to file content is never prevented and provenance information is ignored.
+Access to file content is never prevented and IMA metadata is ignored.
 </t>
 </list>
 </t>
@@ -588,59 +577,72 @@ never allows access to files stored on a non-participating server.
 </list>
 </t>
 <t>
-A provenance assessor on an NFS version 4.2 peer needs to be prepared to deal
-with file provenance information it does not recognize or cannot parse.
-Typically its policy treats this case as a provenance verification failure.
+A integrity assessor module on an NFS version 4.2 peer needs to be prepared to deal
+with IMA metadata it does not recognize or cannot parse.
+Its policy may treat this case as a appraisal failure.
 </t>
 <t>
-Note that an NFS version 4.2 server may use a provenance assessor
+Note that an NFS version 4.2 server may use a integrity assessor module
 to prevent access by local users to protected files.
 To enable NFS version 4.2 clients to do their own assessment,
 an NFS version 4.2 server should not prevent remote access
 to participating clients
-if local provenance assessment fails.
+if local integrity assessment fails.
 </t>
 </section>
 
+</section>
+
+<!-- RFC Editor:
+Please remove the following section and the reference to RFC 7942
+before this document is published.
+-->
 <section
- title="Performance Cost of Provenance Assessment"
- anchor="section:49BAB0E3-A443-4E6C-893B-AF2E680F7C9B">
+ title="Implementation Status"
+ anchor="section:887D5902-4FF5-44F3-AA9C-FE0E6485A53E">
 <t>
-A provenance assessor typically checksums the entirety
-of a file's content.
-When a file's content is first accessed, after it changes,
-or
-if any portion of a file is evicted from an NFS version 4.2 client's cache,
-the client must retrieve any missing content
-before its local provenance assessor can compute a fresh checksum
-to verify the file's content.
+This section records the status of known implementations of the
+protocol defined by this specification at the time of posting of
+this Internet-Draft, and is based on a proposal described in
+<xref target="RFC7942"/>.
+The description of implementations in this section is
+intended to assist the IETF in its decision processes in
+progressing drafts to RFCs.
 </t>
 <t>
-Thus provenance assessment can incur a significant performance impact
-for large files,
-files that change frequently, or
-files where only a portion of the content is used on that client
-(e.g., software libraries).
-A provenance assessor can employ mechanisms not specified here
-to reduce this impact.
-</t>
+Please note that the listing of any individual implementation here
+does not imply endorsement by the IETF.
+Furthermore, no effort has been spent to verify the information
+presented here that was supplied by IETF contributors.
+This is not intended as, and must not be construed to be, a
+catalog of available implementations or their features.
+Readers are advised to note that other implementations may exist.
+ </t>
+
+<section
+ title="Linux NFS server and client"
+ anchor="section:BF03B3A2-4483-4404-9E7A-F60FCD850F31">
 <t>
-For example, instead of signing a hash of the file's byte stream,
-a Merkle tree can be constructed that allows assessors
-to verify the integrity of smaller portions of a large file
-<xref target="MERKLE"/>.
-The root hash of that tree, being of sufficiently limited size,
-can be signed and stored as file provenance information.
-The Merkle tree, which is stored elsewhere, can be used to verify
-portions of the file's content without the need to read the whole file.
+<list style="hanging" hangIndent="11">
+<t hangText="Organization:">
+The Linux Foundation
 </t>
-<t>
-NFS can provide an offload mechanism to mitigate some of the
-network and CPU utilization costs of provenance assessment on clients.
-If there is a strong trust relationship between clients and server,
-and the network transport is of very high integrity,
-the NFS server can perform provenance assessment in lieu of
-exposing file provenance information to clients.
+<t hangText="URL:">
+https://www.kernel.org
+</t>
+<t hangText="Maturity:">
+Prototype software based on early versions of this document.
+</t>
+<t hangText="Coverage:">
+The bulk of this specification is implemented.
+</t>
+<t hangText="Licensing:">
+GPLv2
+</t>
+<t hangText="Implementation experience:">
+No comments from implementors.
+</t>
+</list>
 </t>
 </section>
 
@@ -651,23 +653,23 @@ exposing file provenance information to clients.
  anchor="section:83D5C960-0148-42FA-93E4-3DE7F96EFD34">
 <t>
 The design of the OPTIONAL extension described in this document assumes that
-all file provenance information is keyed or otherwise cryptographically
-signed by a provenance authority
+all IMA metadata is keyed or otherwise cryptographically
+signed by a trust authority
 to prevent unwanted alteration at rest or in transit.
 </t>
 <t>
-When file provenance information for a file exists,
+When IMA metadata for a file exists and the end host has adopted an IMA policy,
 the content of a file is protected from creation to use.
 Receivers can reliably detect unintentional or malicious alteration of file content
-by verifying its content using file provenance information.
+by verifying its content using the file's IMA metadata.
 Additional protection of file content while at rest or in transit
 on an untrusted network is unnecessary.
 </t>
 <t>
 Likewise, receivers can also reliably detect unintentional or malicious alteration
-of file provenance information that is cryptographically signed,
+of IMA metadata that is cryptographically signed,
 simply by verifying its signature.
-Additional protection of signed file provenance information
+Additional protection of signed metadata
 while at rest or in transit on an untrusted network is unnecessary.
 </t>
 <t>
@@ -678,8 +680,8 @@ by repeatedly triggering integrity verification failures on NFS version 4.2 clie
 </t>
 <t>
 To prevent a malicious denial-of-service attempt
-by altering file provenance information at rest,
-an NFS version 4.2 server should enforce a suitable level of privilege
+by altering IMA metadata at rest,
+an NFS version 4.2 server can enforce a suitable level of privilege
 before authorizing a local or remote agent to alter this information.
 See
 <xref target="C17FEFF5-F9F8-46C4-AC3D-1B04DF704752"/>
@@ -691,121 +693,7 @@ for more detail.
  title="IANA Considerations"
  anchor="section:E0578AF8-A3AB-41E0-9626-654F2593B8C4">
 <t>
-In accordance with
-<xref target="RFC8126"/>,
-the author requests that the Internet Assigned Numbers Authority (IANA)
-create a new registry in the
-"Network File System version 4"
-Protocol Category Group.
-The new registry is to be called the
-"File Provenance Information Format Registry".
-</t>
-<t>
-The new registry has the following fields:
-<list style="hanging">
-<t hangText="Code Point:">
-An integer that maps to a particular File Provenance Information format.
-The namespace of this identifier has the range 0..4204067295.
-Or, a range of values to be used for the same purpose.
-</t>
-<t hangText="Description:">
-A human-readable ASCII text string that concisely describes
-the File Provenance Information format.
-The length of this field is limited to 128 bytes.
-</t>
-<t hangText="Max Size:">
-An integer that expresses the largest possible size, in octets,
-required to store a single item of File Provenance Information.
-Typical values are 4096 or 9000.
-A hyphen is stored here when the Code Point column contains a range.
-</t>
-<t hangText="Reference:">
-A reference to a stable public document that requested this entry.
-The document should
-describe the File Provenance Information format
-and
-any specialized storage requirements,
-or
-should reference other public documents as appropriate.
-</t>
-</list>
-</t>
-<t>
-The initial assignments of the registry appear in
-<xref target="table:4858AC9C-1B46-40C5-87CF-A84EB78F5365"/>.
-</t>
-<texttable
- align="left"
- style="full"
- title="File Provenance Information Format Registry"
- anchor="table:4858AC9C-1B46-40C5-87CF-A84EB78F5365">
-<ttcol align="left">Code Point</ttcol>
-<ttcol align="left">Description</ttcol>
-<ttcol align="left">Max Size</ttcol>
-<ttcol align="left">Reference</ttcol>
-<c>0</c>
-<c>Linux IMA</c>
-<c>4096</c>
-<c>
-[RFC-TBD]
-</c>
-<c>1 - 2^31-1</c>
-<c>Available for IANA Assignment</c>
-<c>-</c>
-<c>
-[RFC-TBD]
-</c>
-<c>2^31 - 2^32-1</c>
-<c>Private and Experimental Use</c>
-<c>-</c>
-<c>
-[RFC-TBD]
-</c>
-</texttable>
-
-<!-- RFC Editor:
-Please replace RFC-TBD with the RFC number assigned to this document
--->
-
-<t>
-A format specification document is recommended
-to add a new entry to the "File Provenance Information Registry".
-If the format document is inside the RFC track,
-then the IANA Considerations section of the format document
-should reference the "File Provenance Information Registry"
-and request allocation of a new entry.
-The well-known IANA policy Expert Review, as defined in Section 4.5 of
-<xref target="RFC8126"/>
-is to be used to handle requests to add new entries to
-the "File Provenance Information Registry".
-</t>
-<t>
-When reviewing published file provenance specifications,
-the Designated Expert should consider whether or not
-the specified file provenance format allows
-a correct and complete implementation of the protocol
-to process this information as a policy administration mechanism.
-To reduce interoperability issues, the reviewer must determine
-if the file provenance information format specification
-has clearly defined syntax and semantics.
-</t>
-<t>
-For registration requests where a Designated Expert should be
-consulted, the responsible IESG area director should appoint the
-Designated Expert.
-Allocation of ranges of code points
-(more than one for a given purpose) should require IETF Consensus.
-Code point allocations SHOULD NOT be made for purposes
-unrelated to managing file provenance information.
-</t>
-<t>
-A request to modify either the Description or the published
-file provenance information format specification
-requires the Expert Review IANA policy to be applied.
-If the format document is inside the RFC track,
-the IANA Considerations section of the updated specification
-should be explicit regarding which old label selector assignment
-it modifies.
+This document requests no action from IANA.
 </t>
 </section>
 
@@ -819,6 +707,7 @@ it modifies.
 <?rfc include="reference.RFC.5661.xml"?>
 <?rfc include="reference.RFC.7862.xml"?>
 <?rfc include="reference.RFC.7863.xml"?>
+<?rfc include="reference.RFC.7942.xml"?>
 <?rfc include="reference.RFC.8126.xml"?>
 <?rfc include="reference.RFC.8174.xml"?>
 <?rfc include="reference.RFC.8178.xml"?>
@@ -828,30 +717,6 @@ it modifies.
 <?rfc include="reference.RFC.2104.xml"?>
 <?rfc include="reference.RFC.5662.xml"?>
 <?rfc include="reference.RFC.7861.xml"?>
-
-<reference
- anchor="MERKLE">
-<front>
-<title>A Digital Signature Based on a Conventional Encryption Function</title>
-<author initials="R.C." surname="Merkle" fullname="Ralph Merkle">
-</author>
-<date year="1988"/>
-</front>
-<seriesInfo name="DOI" value="10.1007/3-540-48184-2_32"/>
-<annotation>From "Advances in Cryptology - CRYPTO '87".</annotation>
-</reference>
-
-<reference
- anchor="TPM-SUM"
- target="https://trustedcomputinggroup.org/wp-content/uploads/Trusted-Platform-Module-Summary_04292008.pdf">
-<front>
-<title>Trusted Platform Module (TPM) Summary</title>
-<author>
-<organization>Trusted Computing Group</organization>
-</author>
-<date year="2008" month="April" />
-</front>
-</reference>
 
 </references>
 
@@ -873,7 +738,6 @@ Craig Everhart,
 and
 Bruce Fields
 which helped to make this a better document.
-Benjamin Kaduk proposed the File Provenance Information Registry.
 </t>
 <t>
 The XDR extraction conventions were
@@ -885,7 +749,7 @@ script used in this document.
 </t>
 <t>
 Special thanks go to
-Transport Area Director Spencer Dawkins,
+Transport Area Director Magnus Westerlund,
 NFSV4 Working Group Chairs Spencer Shepler and Brian Pawlowski,
 and
 NFSV4 Working Group Secretary Thomas Haynes
