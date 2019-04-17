@@ -125,7 +125,7 @@ either in transit or at rest.
 <t>
 A cryptographically signed hash
 stored separately from a file's content
-serves as a strong check of a file content's integrity
+serves as a strong check of file content integrity
 and
 authenticates the identity of the provider of the file's content.
 The hash is typically computed using
@@ -186,9 +186,10 @@ and the security module on the host where that content is to be used.
  title="Distributing and Protecting Keying Material"
  anchor="section:EA9E4277-096E-41C7-A824-89C186AC9E12">
 <t>
+A
 <eref
  target="https://trustedcomputinggroup.org/wp-content/uploads/Trusted-Platform-Module-Summary_04292008.pdf">
-A Trusted Platform Module
+Trusted Platform Module
 </eref>
 can seal key material used to sign and appraise file content.
 Unprotected keys are not distributed by or stored in the file system.
@@ -486,6 +487,12 @@ found in Section 18.7 of
 To aid the discussion in this section, we define a few handy terms:
 <list style="symbols">
 <t>
+An "integrity assessor module" is a security module,
+separate from the file system,
+that appraises file content based on a policy and
+IMA measurement results.
+</t>
+<t>
 A "participating client" is an NFS version 4.2 client that
 supports the OPTIONAL extension described in this document
 and
@@ -568,7 +575,7 @@ fresh IMA metadata.
  title="Authorizing Updates to IMA Metadata"
  anchor="C17FEFF5-F9F8-46C4-AC3D-1B04DF704752">
 <t>
-A participating server should ensure
+A participating server needs to ensure
 that modifications to IMA metadata are done
 only by appropriately authorized agents.
 Such agents usually include only
@@ -629,7 +636,7 @@ never allows access to files stored on a non-participating server.
 </list>
 </t>
 <t>
-A integrity assessor module on an NFS version 4.2 peer needs to be prepared to deal
+An integrity assessor module on an NFS version 4.2 peer needs to be prepared to deal
 with IMA metadata it does not recognize or cannot parse.
 Its policy may treat this case as a appraisal failure.
 </t>
@@ -726,7 +733,7 @@ while at rest or in transit on an untrusted network is unnecessary.
 </t>
 <t>
 Like other mechanisms that protect data integrity during transit,
-A malicious agent or a network malfunction
+a malicious agent or a network malfunction
 can create a denial-of-service condition
 by repeatedly triggering integrity verification failures on NFS version 4.2 clients.
 </t>
@@ -763,6 +770,13 @@ This document requests no action from IANA.
 <?rfc include="reference.RFC.8174.xml"?>
 <?rfc include="reference.RFC.8178.xml"?>
 
+</references>
+
+<references title="Informative References">
+<?rfc include="reference.RFC.2104.xml"?>
+<?rfc include="reference.RFC.5662.xml"?>
+<?rfc include="reference.RFC.7861.xml"?>
+
 <reference
  anchor="SAILER">
 <front>
@@ -775,13 +789,6 @@ This document requests no action from IANA.
 </front>
 <seriesInfo name="Proceedings of the" value="13th USENIX Security Symposium"/>
 </reference>
-
-</references>
-
-<references title="Informative References">
-<?rfc include="reference.RFC.2104.xml"?>
-<?rfc include="reference.RFC.5662.xml"?>
-<?rfc include="reference.RFC.7861.xml"?>
 
 </references>
 
