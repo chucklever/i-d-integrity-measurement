@@ -18,7 +18,7 @@
 
 <front>
 
-<title abbrev="IMA over NFS">
+<title abbrev="IMA for NFS Files">
 Integrity Measurement for Network File System version 4
 </title>
 
@@ -111,65 +111,120 @@ provides assurance
 that the content of files is unaltered and authentic to what was
 originally written to those files.
 The primary goal is to detect when
-a remote attacker,
-a local attacker, or
-unintentional platform behavior
-has modified the content of a file
+an attacker,
+unintentional platform behavior,
+or
+local tinkering
+has modified the content of a file,
 either in transit or at rest.
 </t>
+
+<section
+ title="IMA Metadata"
+ anchor="section:61675D23-3584-407E-BBB3-346DD170BFA1">
 <t>
-An separately stored HMAC
-<xref target="RFC2104"/>
+A cryptographically signed hash
+stored separately from a file's content
 serves as a strong check of a file content's integrity
 and
-authenticates the identity of the provider of the content.
-A special tool computes a hash of a file's content,
-the hash is signed by a trust authority (such as a software vendor),
-and finally attached to the file.
+authenticates the identity of the provider of the file's content.
+The hash is typically computed using
+either the SHA-1 or SHA-256 algorithm
+and is stored as an HMAC
+<xref target="RFC2104"/>.
 For the purposes of this document,
-we refer to the signed hash as "IMA metadata".
+we refer to this HMAC as "IMA metadata".
 </t>
 <t>
-Each hash and its signature are verified, or appraised,
-immediately before that file's content is used.
-If appraisal fails, access to the file's content is prevented.
-A security module separate from the file system
-specifies the format of the metadata,
-appraises the file,
+The precise format of this metadata is determined by policies
+set by the local security administrator.
+The metadata format is opaque to the mechanisms that store
+or transport IMA metadata.
+Naturally, this format must be agreed upon (out of band)
+by all agents accessing files protected by this metadata.
+</t>
+</section>
+
+<section
+ title="Creating and Verifying IMA Metadata"
+ anchor="section:F6A13064-1B7B-4848-B172-431EAF1D4819">
+<t>
+In a typical deployment, a trust authority (such as a software vendor)
+computes the hash of a file after its content has been finalized.
+The hash is then signed and attached to the file.
+When the file is copied, the hash accompanies it but is not
+re-computed or re-signed.
+</t>
+<t>
+Immediately before file content is to be used,
+a local security module verifies the
+signature in its IMA metadata and
+re-computes the hash of the file content.
+This step is known as "measurement".
+</t>
+<t>
+The next step is referred to as "appraisal".
+If the signature is invalid or
+the computed hash does not match the stored hash,
+the security module applies an appraisal policy.
+The file may be flagged in an audit log or
+access to the file may be denied.
+</t>
+<t>
+Observe that
+the file and storage systems play no part in measurement or appraisal.
+They act only as a conduit by which
+file content
 and
-enforces a policy for determining
-when file content is safe to use on the local system.
-For the purposes of this document,
-we refer to this module as the "integrity assessor"
-and the policy it uses as the "appraisal policy".
+IMA metadata
+move between at-rest storage
+and the security module on the host where that content is to be used.
 </t>
-<t>
-Appraisal is typically performed at the point of content use.
-The file and storage system play no part in measurement or appraisal.
-The file system acts only as a conduit by which IMA metadata
-and file content move between storage on an NFS server
-and the integrity assessor module on the host where that content is to be used.
-</t>
-<t>
-NFS peers accessing a set of shared files must all agree on
-the IMA metadata format.
-The format is specified by the integrity assessor module
-and is therefore not described in this document.
-The protocol extension in this document enables
-the storage and use of IMA metadata
-so that measurement and appraisal can occur at point-of-use
-on NFS clients.
-The extension does not provide a full assessment mechanism.
-</t>
+</section>
+
+<section
+ title="Distributing and Protecting Keying Material"
+ anchor="section:EA9E4277-096E-41C7-A824-89C186AC9E12">
 <t>
 <eref
  target="https://trustedcomputinggroup.org/wp-content/uploads/Trusted-Platform-Module-Summary_04292008.pdf">
 A Trusted Platform Module
 </eref>
-can seal key material used to sign and verify file content.
+can seal key material used to sign and appraise file content.
+Unprotected keys are not distributed by or stored in the file system.
 Distributing and protecting such key material is outside the scope
 of the extension specified in this document.
 </t>
+</section>
+
+<section
+ title="Using IMA to Protect NFS Files"
+ anchor="section:61F4E746-933C-47A0-AEAD-EB165B5F53A4">
+<t>
+The protocol extension in this document enables
+the storage and use of IMA metadata
+so that measurement and appraisal can occur at point-of-use
+on NFS clients and servers.
+This mechanism is similar to NFSv4 Security Labels
+(specified in
+<xref target="RFC7862"/> and others).
+The purpose of the mechanism defined here is
+to store security-related file metadata.
+The exact format of that metadata is specified elsewhere.
+</t>
+<t>
+To ensure interoperability,
+NFS peers accessing a set of shared files must all agree on
+the IMA metadata format.
+This format is specified by the IMA security module and local policy,
+and is therefore not described in this document.
+The extension described here does not provide a mechanism
+to communicate the IMA metadata format to other hosts;
+as above, that communication must be done by other means.
+The extension thus does not provide a full IMA mechanism.
+</t>
+</section>
+
 </section>
 
 </section>
