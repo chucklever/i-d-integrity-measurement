@@ -105,10 +105,8 @@ have been made of the file's content.
  title="The Linux Integrity Measurement Architecture"
  anchor="section:F09E4A19-531B-4771-A5AD-42B14E0BC030">
 <t>
-<eref
- target="http://downloads.sf.net/project/linux-ima/linux-ima/Integrity_overview.pdf">
 The Linux Integrity Measurement Architecture (IMA)
-</eref>
+<xref target="SAILER"/>
 provides assurance
 that the content of files is unaltered and authentic to what was
 originally written to those files.
@@ -120,25 +118,24 @@ has modified the content of a file
 either in transit or at rest.
 </t>
 <t>
-A keyed hash
-(e.g., an HMAC
-<xref target="RFC2104"/>)
-authenticates the identity of the last modifier of a file's content
+An separately stored HMAC
+<xref target="RFC2104"/>
+serves as a strong check of a file content's integrity
 and
-serves as a strong check of the content's integrity.
+authenticates the identity of the provider of the content.
+A special tool computes a hash of a file's content,
+the hash is signed by a trust authority (such as a software vendor),
+and finally attached to the file.
 For the purposes of this document,
-we refer to this hash as "IMA metadata".
-Such metadata is generated and signed
-by a trusted authority
-and then associated with each file using special tools.
+we refer to the signed hash as "IMA metadata".
 </t>
 <t>
-Each hash and its signature are verified as the file's content
-is read into memory immediately before it is used.
-If verification fails, access to the file's content is prevented.
+Each hash and its signature are verified, or appraised,
+immediately before that file's content is used.
+If appraisal fails, access to the file's content is prevented.
 A security module separate from the file system
 specifies the format of the metadata,
-measures file content,
+appraises the file,
 and
 enforces a policy for determining
 when file content is safe to use on the local system.
@@ -710,6 +707,20 @@ This document requests no action from IANA.
 <?rfc include="reference.RFC.7942.xml"?>
 <?rfc include="reference.RFC.8174.xml"?>
 <?rfc include="reference.RFC.8178.xml"?>
+
+<reference
+ anchor="SAILER">
+<front>
+<title>Design and Implementation of a TCG-based Integrity Measurement Architecture</title>
+<author initials="R.S." surname="Sailer" fullname="Reiner Sailer"></author>
+<author initials="X.Z." surname="Zhang" fullname="Xiaolan Zhang"></author>
+<author initials="T.J." surname="Jaeger" fullname="Trent Jaeger"></author>
+<author initials="L.D." surname="van Doorn" fullname="Leendert van Doorn"></author>
+<date month="August" year="2004"/>
+</front>
+<seriesInfo name="Proceedings of the" value="13th USENIX Security Symposium"/>
+</reference>
+
 </references>
 
 <references title="Informative References">
