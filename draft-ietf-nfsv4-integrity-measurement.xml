@@ -359,11 +359,11 @@ in Section 4.3 of
    ///  */
    ///
    /// %/*
-   /// % * New For Linux IMA support
+   /// % * New For Integrity Measurement support
    /// % */
-   /// opaque                           ima_data&lt;4096&gt;;
+   /// opaque                           imadata4&lt;4096&gt;;
    ///
-   /// const FATTR4_LINUX_IMA = XXX;    /* to be assigned */
+   /// const FATTR4_IMA = XXX;          /* to be assigned */
 
 &lt;CODE ENDS&gt;
 </artwork>
@@ -381,41 +381,41 @@ Please replace XXX with the FATTR4 number assigned by the NFSV4 WG
 <t>
 An NFS version 4.2 client stores IMA metadata
 by sending a SETATTR operation
-that specifies the FATTR4_LINUX_IMA attribute,
+that specifies the FATTR4_IMA attribute,
 targeting the file object
 associated with the metadata to be stored.
 This attribute completely replaces any previous one.
 </t>
 <t>
 To remove IMA metadata from a file,
-the client sends a FATTR4_LINUX_IMA attribute
+the client sends a FATTR4_IMA attribute
 whose length is zero.
 Modifying the file in any other way MUST NOT alter or remove
-FATTR4_LINUX_IMA attributes.
+FATTR4_IMA attributes.
 </t>
 <t>
 When a SETATTR is presented to an NFS version 4.2 server
 with a credential that is not authorized
-to replace a FATTR4_LINUX_IMA attribute,
+to replace a FATTR4_IMA attribute,
 the server MUST respond with NFS4ERR_ACCESS.
 </t>
 <t>
 When a SETATTR is presented to an NFS version 4.2 server
-with a fattr4_linux_ima field
+with an imadata4 field
 whose length is larger than 4096 bytes,
 the server MUST respond with NFS4ERR_INVAL.
 </t>
 <t>
 When a SETATTR is presented to an NFS version 4.2 server
 and the target object resides in a file system
-which supports FATTR4_LINUX_IMA
-but the object itself does not support the FATTR4_LINUX_IMA attribute,
+which supports FATTR4_IMA
+but the object itself does not support the FATTR4_IMA attribute,
 the server MUST respond with NFS4ERR_WRONGTYPE.
 </t>
 <t>
 When a SETATTR is presented to an NFS version 4.2 server
 but the target object resides in a file system which does not
-support the FATTR4_LINUX_IMA attribute,
+support the FATTR4_IMA attribute,
 the server MUST respond with NFS4ERR_ATTRNOTSUPP.
 </t>
 <t>
@@ -430,7 +430,7 @@ found in Section 18.30 of
  anchor="section:3F3277B1-50F2-4317-9707-1A27FE3B0112">
 <t>
 An NFS version 4.2 client retrieves IMA metadata
-by retrieving the FATTR4_LINUX_IMA attribute
+by retrieving the FATTR4_IMA attribute
 via a GETATTR operation,
 specifying the file handle of the file object
 associated with the metadata to be retrieved.
@@ -440,23 +440,23 @@ previously on this client or by some other agent.
 <t>
 When a GETATTR is presented to an NFS version 4.2 server
 and the target object resides in a file system
-which supports the FATTR4_LINUX_IMA attribute
-but the object does not support the FATTR4_LINUX_IMA attribute,
+which supports the FATTR4_IMA attribute
+but the object does not support the FATTR4_IMA attribute,
 the server MUST respond with NFS4ERR_WRONGTYPE.
 </t>
 <t>
 When a GETATTR is presented to an NFS version 4.2 server
 but the target object resides in a file system which does not
-support FATTR4_LINUX_IMA,
+support FATTR4_IMA,
 this does not result in an error and
-the FATTR4_FILE_PROVENANCE attribute bit is cleared
+the FATTR4_IMA attribute bit is cleared
 in the server's response.
 </t>
 <t>
-Otherwise, if the target object supports FATTR4_LINUX_IMA
+Otherwise, if the target object supports FATTR4_IMA
 and there is no IMA metadata is available for the
 target object,
-the server returns a FATTR4_LINUX_IMA attribute
+the server returns a FATTR4_IMA attribute
 whose length is zero.
 </t>
 <t>
@@ -752,7 +752,7 @@ for more detail.
  title="IANA Considerations"
  anchor="section:E0578AF8-A3AB-41E0-9626-654F2593B8C4">
 <t>
-This document requests no action from IANA.
+This document has no IANA actions.
 </t>
 </section>
 
