@@ -396,15 +396,15 @@ Please replace XXX with the FATTR4 number assigned by the NFSV4 WG
 An NFS version 4.2 client stores IMA metadata
 by sending a SETATTR operation
 that specifies the FATTR4_IMA attribute,
-targeting the file object
+targeting the file system object
 associated with the metadata to be stored.
-This attribute completely replaces any previous one.
+This attribute completely replaces any previous FATTR4_IMA attribute.
 </t>
 <t>
-To remove IMA metadata from a file,
+To remove IMA metadata from an object,
 the client sends a FATTR4_IMA attribute
 whose length is zero.
-Modifying the file in any other way MUST NOT alter or remove
+Modifying the object in any other way MUST NOT alter or remove
 FATTR4_IMA attributes.
 </t>
 <t>
@@ -425,6 +425,10 @@ and the target object resides in a file system
 which supports FATTR4_IMA
 but the object itself does not support the FATTR4_IMA attribute,
 the server MUST respond with NFS4ERR_WRONGTYPE.
+For example, if the server's file system supports associating
+IMA metadata with regular files but not with directories, then
+the result of an attempt to associate IMA metadata with a directory
+will be NFS4ERR_WRONGTYPE.
 </t>
 <t>
 When a SETATTR is presented to an NFS version 4.2 server
@@ -433,10 +437,32 @@ support the FATTR4_IMA attribute,
 the server MUST respond with NFS4ERR_ATTRNOTSUPP.
 </t>
 <t>
+When a client presents a SETATTR that modifies FATTR4_IMA
+along with other attributes and the server responds with
+an error, the client can retry setting each attribute
+separately to sort out which attribute is causing the
+server to reject the SETATTR operation.
+</t>
+<t>
 A detailed description of the SETATTR operation can be
 found in Section 18.30 of
 <xref target="RFC5661"/>.
 </t>
+
+<section
+ title="Sending IMA Metadata When Creating a New Object"
+ anchor="section:D7663BDC-A0C8-437D-88A5-1D79A3E7F9C2">
+<t>
+An alternate way to set an attribute is to provide the attribute
+during an NFS OPEN(CREATE) operation.
+Upon creation, an object has no content to protect.
+If a client presents an FATTR4_IMA attribute
+to an NFS version 4.2 server during OPEN(CREATE),
+the server MUST respond with NFS4ERR_INVAL.
+</t>
+
+</section>
+
 </section>
 
 <section
@@ -446,10 +472,8 @@ found in Section 18.30 of
 An NFS version 4.2 client retrieves IMA metadata
 by retrieving the FATTR4_IMA attribute
 via a GETATTR operation,
-specifying the file handle of the file object
+specifying the file handle of the object
 associated with the metadata to be retrieved.
-This information may have been computed and signed
-previously on this client or by some other agent.
 </t>
 <t>
 When a GETATTR is presented to an NFS version 4.2 server
@@ -457,6 +481,10 @@ and the target object resides in a file system
 which supports the FATTR4_IMA attribute
 but the object does not support the FATTR4_IMA attribute,
 the server MUST respond with NFS4ERR_WRONGTYPE.
+For example, if the server's file system supports associating
+IMA metadata with regular files but not directories, then
+the result of an attempt to retrieve IMA metadata on a directory
+will be NFS4ERR_WRONGTYPE.
 </t>
 <t>
 When a GETATTR is presented to an NFS version 4.2 server
@@ -474,18 +502,78 @@ the server returns a FATTR4_IMA attribute
 whose length is zero.
 </t>
 <t>
-Integrity assessment occurs after file content has been delivered
-but immediately before that content is to be used.
-To enable integrity assessment on NFS clients to verify
-IMA metadata, NFS version 4.2 servers should not
-prevent access to file content if they have a local appraisal policy
-and it indicates that integrity verification has failed.
+When a client presents a GETATTR that retrieves FATTR4_IMA
+along with other attributes and the server responds with
+an error, the client can retry by retrieving each attribute
+separately to sort out which attribute is causing the
+server to reject the GETATTR operation.
 </t>
 <t>
 A detailed description of the GETATTR operation can be
 found in Section 18.7 of
 <xref target="RFC5661"/>.
 </t>
+</section>
+
+<section
+ title="Using NFS Attribute Fencing (VERIFY/NVERIFY)"
+ anchor="section:14C3407B-4FE2-4300-82DF-D6ECC55BAABB">
+<t>
+The NFS VERIFY and NVERIFY operations,
+described in RFC 5661 Sections 18.31 and 18.15 respectively,
+permit a client to add a fence in an NFS COMPOUND where,
+if a provided FATTR4 attribute does or does not match,
+the server can force processing of that COMPOUND to stop.
+The FATTR4_IMA attribute is a valid choice for these
+operations.
+</t>
+<t>
+The server uses a simple byte comparison to evaluate whether the
+client-provided FATTR4_IMA matches the FATTR4_IMA attribute
+associated with the target object.
+If the server has a local IMA implementation,
+it MAY prevent the use of the local FATTR4_IMA attribute value
+for the purpose of this comparison (via EVM protection).
+</t>
+<t>
+[ cel: How to report appraisal failure in that case? ]
+</t>
+
+</section>
+
+<section
+ title="Reporting Server-Side IMA Appraisal Failures"
+ anchor="section:845E57CD-BE87-4B6F-BD81-515474D9AAC8">
+<t>
+The issue here is whether a server should deny access to
+an object if its local IMA appraisal fails.
+The main issue is that there is currently no error code
+the server can use to report an integrity failure (of any kind).
+Thus the server reports only that access to the target object is denied,
+otherwise providing no visibility into why the denial occurred.
+This is a general shortcoming of the NFS protocol.
+</t>
+<t>
+The preferred approach might depend on whether
+each client has its own IMA implementation.
+If a client does not, the server prevents access to bad data,
+which is desirable.
+However, a legacy client would not be able to recognize
+a new error code we might add in this document to
+indicate an integrity check failure.
+</t>
+<t>
+If the client does have an IMA implementation,
+the server prevents access and the client
+cannot tell why or locally report a specific problem
+because it has no access to the file content in order
+to measure and appraise it.
+This is not desirable.
+</t>
+<t>
+[ cel: This remains an open issue. ]
+</t>
+
 </section>
 
 </section>
