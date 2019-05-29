@@ -110,13 +110,28 @@ The Linux Integrity Measurement Architecture (IMA)
 provides assurance
 that the content of files is unaltered and authentic to what was
 originally written to those files.
-The primary goal is to detect when
+The goal is to detect when
 an attacker,
 unintentional platform behavior,
 or
 local tinkering
 has modified the content of a file,
 either in transit or at rest.
+</t>
+<t>
+This is done by separately storing metadata about a file's content
+and then using that metadata to verify the content before it is used.
+Verification of the content is entirely independent of the file system.
+File systems, both local and remote, act simply as storage for both the
+content and the metadata, both of which are opaque to the storage subsystem.
+</t>
+<t>
+A rough informative description of this mechanism
+is provided in the following subsections
+to provide context for understanding the NFS protocol extension
+described later in this document.
+As the file system does not interpret IMA metadata,
+this description is not necessary to implement the extension.
 </t>
 
 <section
@@ -128,20 +143,27 @@ stored separately from a file's content
 serves as a strong check of file content integrity
 and
 authenticates the identity of the provider of the file's content.
+The signer is verified at time of content use
+via a web of trust commonly provided by PKI or
+x.509 certificates
+<xref target="RFC4158"/>.
+</t>
+<t>
 The hash is typically computed using
 either the SHA-1 or SHA-256 algorithm
 and is stored as an HMAC
 <xref target="RFC2104"/>.
 For the purposes of this document,
-we refer to this HMAC as "IMA metadata".
+we refer to this blob as "IMA metadata".
 </t>
 <t>
 The precise format of this metadata is determined by policies
-set by the local security administrator.
-The metadata format is opaque to the mechanisms that store
-or transport IMA metadata.
-Naturally, this format must be agreed upon (out of band)
-by all agents accessing files protected by this metadata.
+set by the local security administrator;
+the metadata and its format are opaque to the mechanisms that store
+or transport it (i.e., file systems).
+The particulars of the PKI and the hash algorithm
+are agreed upon out-of-band
+and recognized by all participating IMA subsystems.
 </t>
 </section>
 
@@ -149,23 +171,25 @@ by all agents accessing files protected by this metadata.
  title="Creating and Verifying IMA Metadata"
  anchor="section:F6A13064-1B7B-4848-B172-431EAF1D4819">
 <t>
-In a typical deployment, a trust authority (such as a software vendor)
+In a typical deployment, an authority (such as a software vendor)
 computes the hash of a file after its content has been finalized.
 The hash is then signed and attached to the file.
-When the file is copied, the hash accompanies it but is not
-re-computed or re-signed.
+The signer is typically linked to file content users
+(such as customers of the software vendor)
+by a public web of trust.
 </t>
 <t>
-Immediately before file content is to be used,
-a local security module verifies the
-signature in its IMA metadata and
-re-computes the hash of the file content.
+Before file content is to be used,
+a security module locally re-computes the hash of the file content
+and stores it in a cache.
 This step is known as "measurement".
 </t>
 <t>
 The next step is referred to as "appraisal".
+The security module then reads the associated IMA metadata
+and validates its signature.
 If the signature is invalid or
-the computed hash does not match the stored hash,
+the locally computed hash does not match the stored hash,
 the security module applies an appraisal policy.
 The file may be flagged in an audit log or
 access to the file may be denied.
@@ -179,6 +203,7 @@ and
 IMA metadata
 move between at-rest storage
 and the security module on the host where that content is to be used.
+Both IMA metadata and file content are opaque to the storage subsystem.
 </t>
 </section>
 
@@ -205,24 +230,13 @@ of the extension specified in this document.
 The protocol extension in this document enables
 the storage and use of IMA metadata
 so that measurement and appraisal can occur at point-of-use
-on NFS clients and servers.
+on NFS client and server hosts.
 This mechanism is similar to NFSv4 Security Labels
 (specified in
 <xref target="RFC7862"/> and others).
 The purpose of the mechanism defined here is
-to store security-related file metadata.
-The exact format of that metadata is specified elsewhere.
-</t>
-<t>
-To ensure interoperability,
-NFS peers accessing a set of shared files must all agree on
-the IMA metadata format.
-This format is specified by the IMA security module and local policy,
-and is therefore not described in this document.
-The extension described here does not provide a mechanism
-to communicate the IMA metadata format to other hosts;
-as above, that communication must be done by other means.
-The extension thus does not provide a full IMA mechanism.
+to store security-related file metadata
+that is not interpreted by the file system itself.
 </t>
 </section>
 
@@ -508,7 +522,7 @@ does not employ a integrity assessor module.
 A "participating server" is an NFS version 4.2 server that
 supports the OPTIONAL extension described in this document
 and
-its shared filesystems can store IMA metadata.
+its shared file systems can store IMA metadata.
 A participating server is not required to implement
 an integrity assessor module.
 </t>
@@ -516,7 +530,7 @@ an integrity assessor module.
 A "non-participating server" is an NFS version 4.2 server that
 does not support the OPTIONAL extension described in this document
 or
-its shared filesystems are not capable of storing IMA metadata.
+its shared file systems are not capable of storing IMA metadata.
 </t>
 </list>
 </t>
@@ -774,6 +788,7 @@ This document has no IANA actions.
 
 <references title="Informative References">
 <?rfc include="reference.RFC.2104.xml"?>
+<?rfc include="reference.RFC.4158.xml"?>
 <?rfc include="reference.RFC.5662.xml"?>
 <?rfc include="reference.RFC.7861.xml"?>
 
