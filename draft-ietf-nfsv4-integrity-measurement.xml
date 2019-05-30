@@ -375,17 +375,108 @@ in Section 4.3 of
    /// %/*
    /// % * New For Integrity Measurement support
    /// % */
-   /// opaque                           imadata4&lt;4096&gt;;
+   /// opaque                           ima_data4&lt;4096&gt;;
    ///
    /// const FATTR4_IMA = XXX;          /* to be assigned */
+   ///
+   /// %/*
+   /// % *New value added to enum nfsstat4
+   /// % */
+   /// const NFS4ERR_INTEGRITY = YYYYY; /* to be assigned */
 
 &lt;CODE ENDS&gt;
 </artwork>
 </figure>
 
 <!-- RFC Editor:
-Please replace XXX with the FATTR4 number assigned by the NFSV4 WG
+In this document, please replace XXX with the FATTR4 number
+assigned by the NFSV4 WG, and replace YYYYY with the NFS4ERR
+code point assigned by the NFSV4 WG.
 -->
+
+<section
+ title="NFS4ERR_INTEGRITY (Error Code YYYYY)"
+ anchor="section:4AE2D6D4-A105-4E17-A93C-149E14A23F10">
+<t>
+The server rejected this request because
+a data or metadata integrity check failed during its execution.
+</t>
+
+</section>
+
+</section>
+
+<section
+ title="Detecting support for IMA Metadata"
+ anchor="section:49517532-7084-4F57-A9E0-E6D9E539BD66">
+<t>
+An NFS version 4.2 client discovers support for IMA metadata
+on an NFS version 4.2 server by sending an NFS GETATTR operation
+that specifies the FATTR4_SUPPORTED_ATTRS attribute and
+the FATTR4_IMA attribute.
+When a server supports IMA metadata, it sets the FATTR4_IMA
+attribute bit in the NFS GETATTR bitmask returned in the reply.
+Otherwise that bit is clear.
+</t>
+<t>
+An NFS version 4.2 server MUST NOT return NFS4ERR_INTEGRITY to a client
+unless that client has queried the server for IMA metadata support
+using the above mechanism.
+The server identifies clients using their client_id4 for this purpose.
+</t>
+
+<section
+ title="Reporting Server-Side IMA Appraisal Failures"
+ anchor="section:845E57CD-BE87-4B6F-BD81-515474D9AAC8">
+<t>
+An NFS server that has rigorous integrity checking must
+somehow report integrity-related failures to clients.
+Until now, a server implementer chose amongst error codes
+that were available in the base NFS version 4.2 protocol,
+typically NFS4ERR_IO or NFS4ERR_ACCESS, even though these
+errors have generic meanings that do not necessarily imply
+an integrity-related failure.
+</t>
+<t>
+Once the above FATTR4_SUPPORTED_ATTRS handshake is done,
+the server has determined that a client
+can properly handle the new NFS4ERR_INTEGRITY error code.
+In instances where an NFS request fails
+due to an integrity-related issue,
+and the server has determined that the client recognizes
+the NFS4ERR_INTEGRITY error code,
+the server MAY return NFS4ERR_INTEGRITY for the following operations:
+ACCESS,
+COMMIT,
+CREATE,
+GETATTR,
+GETDEVICELIST,
+LINK,
+LOOKUP,
+LOOKUPP,
+NVERIFY,
+OPEN,
+OPENATTR,
+READ,
+READDIR,
+READLINK,
+REMOVE,
+RENAME,
+SETATTR,
+VERIFY,
+WRITE.
+</t>
+<t>
+This is useful to inform the client
+(or the user, depending on the client implementation)
+that access to the file's content was not blocked because of a
+permissions setting but rather because an integrity check failed.
+</t>
+<t>
+[ cel: this is still an open issue ]
+</t>
+
+</section>
 
 </section>
 
@@ -394,57 +485,58 @@ Please replace XXX with the FATTR4 number assigned by the NFSV4 WG
  anchor="section:7167B240-32ED-47DB-903E-874A3A43FF9B">
 <t>
 An NFS version 4.2 client stores IMA metadata
-by sending a SETATTR operation
-that specifies the FATTR4_IMA attribute,
-targeting the file system object
+by sending an NFS SETATTR operation
+that specifies the FATTR4_IMA attribute and
+targets the file system object
 associated with the metadata to be stored.
-This attribute completely replaces any previous FATTR4_IMA attribute.
+This attribute completely replaces any previous FATTR4_IMA attribute
+associated with that object.
+Modifying an object in any other way MUST NOT alter or remove
+FATTR4_IMA attributes.
 </t>
 <t>
 To remove IMA metadata from an object,
 the client sends a FATTR4_IMA attribute
 whose length is zero.
-Modifying the object in any other way MUST NOT alter or remove
-FATTR4_IMA attributes.
 </t>
 <t>
-When a SETATTR is presented to an NFS version 4.2 server
+When an NFS SETATTR is presented to an NFS version 4.2 server
 with a credential that is not authorized
 to replace a FATTR4_IMA attribute,
 the server MUST respond with NFS4ERR_ACCESS.
 </t>
 <t>
-When a SETATTR is presented to an NFS version 4.2 server
-with an imadata4 field
+When an NFS SETATTR is presented to an NFS version 4.2 server
+with an ima_data4 field
 whose length is larger than 4096 bytes,
 the server MUST respond with NFS4ERR_INVAL.
 </t>
 <t>
-When a SETATTR is presented to an NFS version 4.2 server
+When an NFS SETATTR is presented to an NFS version 4.2 server
 and the target object resides in a file system
 which supports FATTR4_IMA
 but the object itself does not support the FATTR4_IMA attribute,
 the server MUST respond with NFS4ERR_WRONGTYPE.
 For example, if the server's file system supports associating
-IMA metadata with regular files but not with directories, then
-the result of an attempt to associate IMA metadata with a directory
+IMA metadata with regular files but not with sockets or FIFOs,
+then the result of an attempt to associate IMA metadata with a FIFO
 will be NFS4ERR_WRONGTYPE.
 </t>
 <t>
-When a SETATTR is presented to an NFS version 4.2 server
+When an NFS SETATTR is presented to an NFS version 4.2 server
 but the target object resides in a file system which does not
 support the FATTR4_IMA attribute,
 the server MUST respond with NFS4ERR_ATTRNOTSUPP.
 </t>
 <t>
-When a client presents a SETATTR that modifies FATTR4_IMA
+When a client presents an NFS SETATTR that modifies FATTR4_IMA
 along with other attributes and the server responds with
 an error, the client can retry setting each attribute
 separately to sort out which attribute is causing the
-server to reject the SETATTR operation.
+server to reject the NFS SETATTR operation.
 </t>
 <t>
-A detailed description of the SETATTR operation can be
+A detailed description of the NFS SETATTR operation can be
 found in Section 18.30 of
 <xref target="RFC5661"/>.
 </t>
@@ -457,8 +549,47 @@ An alternate way to set an attribute is to provide the attribute
 during an NFS OPEN(CREATE) operation.
 Upon creation, an object has no content to protect.
 If a client presents an FATTR4_IMA attribute
-to an NFS version 4.2 server during OPEN(CREATE),
+to an NFS version 4.2 server during NFS OPEN(CREATE),
 the server MUST respond with NFS4ERR_INVAL.
+</t>
+
+</section>
+
+<section
+ title="Authorizing Updates to IMA Metadata"
+ anchor="C17FEFF5-F9F8-46C4-AC3D-1B04DF704752">
+<t>
+An NFS version 4.2 server needs to ensure
+that modifications to IMA metadata are done
+only by appropriately authorized agents.
+Although access to file content is typically controlled by
+ACLs and permission bits,
+these mechanisms do not apply to IMA metadata.
+The question of "who is authorized to modify IMA metadata"
+is left to local security policy.
+</t>
+<t>
+Possible implementations include limiting IMA metadata update authority to:
+<list style="hanging">
+<t hangText="Particular users">
+<vspace/>
+The server may allow IMA metadata updates only by
+UID 0
+or
+by a client's machine principal.
+</t>
+<t hangText="Particular clients">
+<vspace/>
+The server may allow IMA metadata updates only from specific client IP addresses.
+</t>
+<t hangText="File owners">
+<vspace/>
+The server may allow IMA metadata updates only by the file's owner or group owner.
+</t>
+</list>
+</t>
+<t>
+[ cel: this is still an open issue. ]
 </t>
 
 </section>
@@ -471,23 +602,30 @@ the server MUST respond with NFS4ERR_INVAL.
 <t>
 An NFS version 4.2 client retrieves IMA metadata
 by retrieving the FATTR4_IMA attribute
-via a GETATTR operation,
+via an NFS GETATTR operation,
 specifying the file handle of the object
 associated with the metadata to be retrieved.
 </t>
 <t>
-When a GETATTR is presented to an NFS version 4.2 server
+The IMA subsystem typically manages its own cache
+of this metadata to maintain reasonable performance.
+The NFS client implementation MUST always pass
+retrieval requests for this metadata to the server.
+This metadata MUST NOT be cached by the NFS client.
+</t>
+<t>
+When an NFS GETATTR is presented to an NFS version 4.2 server
 and the target object resides in a file system
 which supports the FATTR4_IMA attribute
 but the object does not support the FATTR4_IMA attribute,
 the server MUST respond with NFS4ERR_WRONGTYPE.
 For example, if the server's file system supports associating
-IMA metadata with regular files but not directories, then
-the result of an attempt to retrieve IMA metadata on a directory
+IMA metadata with regular files but not named attributes, then
+the result of an attempt to retrieve IMA metadata on a named attribute
 will be NFS4ERR_WRONGTYPE.
 </t>
 <t>
-When a GETATTR is presented to an NFS version 4.2 server
+When an NFS GETATTR is presented to an NFS version 4.2 server
 but the target object resides in a file system which does not
 support FATTR4_IMA,
 this does not result in an error and
@@ -502,14 +640,14 @@ the server returns a FATTR4_IMA attribute
 whose length is zero.
 </t>
 <t>
-When a client presents a GETATTR that retrieves FATTR4_IMA
+When a client presents an NFS GETATTR that retrieves FATTR4_IMA
 along with other attributes and the server responds with
 an error, the client can retry by retrieving each attribute
 separately to sort out which attribute is causing the
-server to reject the GETATTR operation.
+server to reject the NFS GETATTR operation.
 </t>
 <t>
-A detailed description of the GETATTR operation can be
+A detailed description of the NFS GETATTR operation can be
 found in Section 18.7 of
 <xref target="RFC5661"/>.
 </t>
@@ -520,7 +658,8 @@ found in Section 18.7 of
  anchor="section:14C3407B-4FE2-4300-82DF-D6ECC55BAABB">
 <t>
 The NFS VERIFY and NVERIFY operations,
-described in RFC 5661 Sections 18.31 and 18.15 respectively,
+described in Sections 18.31 and 18.15 of
+<xref target="RFC5661"/> respectively,
 permit a client to add a fence in an NFS COMPOUND where,
 if a provided FATTR4 attribute does or does not match,
 the server can force processing of that COMPOUND to stop.
@@ -528,50 +667,13 @@ The FATTR4_IMA attribute is a valid choice for these
 operations.
 </t>
 <t>
-The server uses a simple byte comparison to evaluate whether the
-client-provided FATTR4_IMA matches the FATTR4_IMA attribute
+The server MUST use a simple byte comparison to evaluate whether
+the client-provided FATTR4_IMA matches the FATTR4_IMA attribute
 associated with the target object.
 If the server has a local IMA implementation,
 it MAY prevent the use of the local FATTR4_IMA attribute value
 for the purpose of this comparison (via EVM protection).
-</t>
-<t>
-[ cel: How to report appraisal failure in that case? ]
-</t>
-
-</section>
-
-<section
- title="Reporting Server-Side IMA Appraisal Failures"
- anchor="section:845E57CD-BE87-4B6F-BD81-515474D9AAC8">
-<t>
-The issue here is whether a server should deny access to
-an object if its local IMA appraisal fails.
-The main issue is that there is currently no error code
-the server can use to report an integrity failure (of any kind).
-Thus the server reports only that access to the target object is denied,
-otherwise providing no visibility into why the denial occurred.
-This is a general shortcoming of the NFS protocol.
-</t>
-<t>
-The preferred approach might depend on whether
-each client has its own IMA implementation.
-If a client does not, the server prevents access to bad data,
-which is desirable.
-However, a legacy client would not be able to recognize
-a new error code we might add in this document to
-indicate an integrity check failure.
-</t>
-<t>
-If the client does have an IMA implementation,
-the server prevents access and the client
-cannot tell why or locally report a specific problem
-because it has no access to the file content in order
-to measure and appraise it.
-This is not desirable.
-</t>
-<t>
-[ cel: This remains an open issue. ]
+The server MUST respond with NFS4ERR_INTEGRITY in this case.
 </t>
 
 </section>
@@ -672,21 +774,6 @@ depending on the appraisal policy in effect.
 Thus updating the file content usually requires generating
 fresh IMA metadata.
 </t>
-
-<section
- title="Authorizing Updates to IMA Metadata"
- anchor="C17FEFF5-F9F8-46C4-AC3D-1B04DF704752">
-<t>
-A participating server needs to ensure
-that modifications to IMA metadata are done
-only by appropriately authorized agents.
-Such agents usually include only
-agents with super-user privileges.
-The NFS server MAY confirm that the new IMA metadata
-actually verifies the file content correctly before
-storing it.
-</t>
-</section>
 
 </section>
 
