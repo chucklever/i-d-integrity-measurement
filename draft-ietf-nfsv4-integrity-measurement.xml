@@ -108,8 +108,8 @@ have been made of the file's content.
 The Linux Integrity Measurement Architecture (IMA)
 <xref target="SAILER"/>
 provides assurance
-that the content of files is unaltered and authentic to what was
-originally written to those files.
+that the content of a file is unaltered and authentic to what was
+originally written to that file.
 The goal is to detect when
 an attacker,
 unintentional platform behavior,
@@ -126,8 +126,8 @@ File systems, both local and remote, act simply as storage for both the
 content and the metadata, both of which are opaque to the storage subsystem.
 </t>
 <t>
-A rough informative description of this mechanism
-is provided in the following subsections
+An informative description of this mechanism
+is presented in the following subsections
 to provide context for understanding the NFS protocol extension
 described later in this document.
 As the file system does not interpret IMA metadata,
@@ -154,7 +154,7 @@ either the SHA-1 or SHA-256 algorithm
 and is stored as an HMAC
 <xref target="RFC2104"/>.
 For the purposes of this document,
-we refer to this blob as "IMA metadata".
+the current document refers to this blob as "IMA metadata".
 </t>
 <t>
 The precise format of this metadata is determined by policies
@@ -174,12 +174,12 @@ and recognized by all participating IMA subsystems.
 In a typical deployment, an authority (such as a software vendor)
 computes the hash of a file after its content has been finalized.
 The hash is then signed and attached to the file.
-The signer is typically linked to file content users
-(such as customers of the software vendor)
-by a public web of trust.
+A web of trust typically links
+the signer to the users of the file's content
+(such as customers of the software vendor).
 </t>
 <t>
-Before file content is to be used,
+Directly before file content is to be used,
 a security module locally re-computes the hash of the file content
 and stores it in a cache.
 This step is known as "measurement".
@@ -195,15 +195,14 @@ The file may be flagged in an audit log or
 access to the file may be denied.
 </t>
 <t>
-Observe that
-the file and storage systems play no part in measurement or appraisal.
+Underlying file and storage systems play no part in measurement or appraisal.
 They act only as a conduit by which
 file content
 and
 IMA metadata
 move between at-rest storage
 and the security module on the host where that content is to be used.
-Both IMA metadata and file content are opaque to the storage subsystem.
+Both IMA metadata and file content are opaque to storage subsystems.
 </t>
 </section>
 
@@ -217,7 +216,7 @@ A
 Trusted Platform Module
 </eref>
 can seal key material used to sign and appraise file content.
-Unprotected keys are not distributed by or stored in the file system.
+Unprotected keys are not stored in or distributed via file systems.
 Distributing and protecting such key material is outside the scope
 of the extension specified in this document.
 </t>
@@ -233,8 +232,9 @@ so that measurement and appraisal can occur at point-of-use
 on NFS client and server hosts.
 This mechanism is similar to NFSv4 Security Labels
 (specified in
-<xref target="RFC7862"/> and others).
-The purpose of the mechanism defined here is
+<xref target="RFC7862"/>
+et al).
+The purpose of the mechanism defined in the current document is
 to store security-related file metadata
 that is not interpreted by the file system itself.
 </t>
@@ -431,20 +431,20 @@ The server identifies clients using their client_id4 for this purpose.
 <t>
 An NFS server that has rigorous integrity checking must
 somehow report integrity-related failures to clients.
-Until now, a server implementer chose amongst error codes
+Until now, a server implementer chose amongst status codes
 that were available in the base NFS version 4.2 protocol,
 typically NFS4ERR_IO or NFS4ERR_ACCESS, even though these
-errors have generic meanings that do not necessarily imply
+code points have generic meanings that do not necessarily imply
 an integrity-related failure.
 </t>
 <t>
 Once the above FATTR4_SUPPORTED_ATTRS handshake is done,
 the server has determined that a client
-can properly handle the new NFS4ERR_INTEGRITY error code.
+can properly recognize the NFS4ERR_INTEGRITY status code.
 In instances where an NFS request fails
 due to an integrity-related issue,
 and the server has determined that the client recognizes
-the NFS4ERR_INTEGRITY error code,
+the NFS4ERR_INTEGRITY status code,
 the server MAY return NFS4ERR_INTEGRITY for the following operations:
 ACCESS,
 COMMIT,
@@ -465,12 +465,15 @@ RENAME,
 SETATTR,
 VERIFY,
 WRITE.
+The server MUST NOT return NFS4ERR_INTEGRITY for any other operation.
 </t>
 <t>
-This is useful to inform the client
-(or the user, depending on the client implementation)
+The NFS4ERR_INTEGRITY status code is useful to inform the client
+(or the end user, depending on the client implementation)
 that access to the file's content was not blocked because of a
 permissions setting but rather because an integrity check failed.
+This distinction can guide the user or client towards a recovery
+action that is appropriate.
 </t>
 <t>
 [ cel: this is still an open issue ]
@@ -673,7 +676,9 @@ associated with the target object.
 If the server has a local IMA implementation,
 it MAY prevent the use of the local FATTR4_IMA attribute value
 for the purpose of this comparison (via EVM protection).
-The server MUST respond with NFS4ERR_INTEGRITY in this case.
+If the client has indicated support for IMA metadata,
+the server MUST respond with NFS4ERR_INTEGRITY.
+Otherwise it MUST respond with NFS4ERR_ACCESS.
 </t>
 
 </section>
@@ -681,112 +686,75 @@ The server MUST respond with NFS4ERR_INTEGRITY in this case.
 </section>
 
 <section
- title="Operation"
+ title="Deployment Examples"
  anchor="section:4EFFE51F-F07A-490A-9E15-8167D21D3D9D">
 
 <section
  title="Terminology"
  anchor="section:54604E8A-1B3C-4571-B3EC-403567C43AF6">
 <t>
-To aid the discussion in this section, we define a few handy terms:
-<list style="symbols">
-<t>
-An "integrity assessor module" is a security module,
-separate from the file system,
+Because the protocol extension described herein is OPTIONAL,
+clients and servers that support it must necessarily interact
+with clients and servers that do not support it.
+To aid the discussion in this section, we define a some terms:
+<list style="hanging">
+<t hangText="Integrity Assessor:">
+A security module separate from the file system
 that appraises file content based on a policy and
 IMA measurement results.
 </t>
-<t>
-A "participating client" is an NFS version 4.2 client that
-supports the OPTIONAL extension described in this document
-and
-employs a integrity assessor module.
+<t hangText="Participating Client:">
+An NFS version 4.2 client that
+employs a integrity assessor,
+supports the OPTIONAL extension described in this document, and
+indicates this support to servers using the handshake described in
+<xref target="section:49517532-7084-4F57-A9E0-E6D9E539BD66"/>.
 </t>
-<t>
-A "non-participating client" is an NFS version 4.2 client that
-does not support the OPTIONAL extension described in this document
-or
-does not employ a integrity assessor module.
+<t hangText="Non-participating Client:">
+An NFS version 4.2 client that
+does not support the OPTIONAL extension described in this document.
 </t>
-<t>
-A "participating server" is an NFS version 4.2 server that
-supports the OPTIONAL extension described in this document
-and
+<t hangText="Participating Server:">
+An NFS version 4.2 server that
+supports the OPTIONAL extension described in this document,
+indicates this support to clients using the handshake described in
+<xref target="section:49517532-7084-4F57-A9E0-E6D9E539BD66"/>, and
 its shared file systems can store IMA metadata.
 A participating server is not required to implement
-an integrity assessor module.
+an integrity assessor.
 </t>
-<t>
-A "non-participating server" is an NFS version 4.2 server that
-does not support the OPTIONAL extension described in this document
-or
-its shared file systems are not capable of storing IMA metadata.
+<t hangText="Non-participating Server:">
+An NFS version 4.2 server that
+does not support the OPTIONAL extension described in this document.
 </t>
 </list>
 </t>
 <t>
 In addition, there are intermediate modes of operation
 on participating peers:
-<list style="symbols">
-<t>
-A "full-function client" is a participating client that
-supports updating remote IMA metadata.
+<list style="hanging">
+<t hangText="Full-function Client:">
+A participating client that can modify IMA metadata via NFS.
 </t>
-<t>
-A "fetch-only client" is a participating client that
-does not support modifying IMA metadata
+<t hangText="Fetch-only Client:">
+A participating client that does not support modifying IMA metadata
 on a participating server.
 </t>
-<t>
-A "full-function server" is a participating server that
+<t hangText="Full-function Server:">
+A participating server that
+has a local user execution environment and
 supports updating IMA metadata
 that resides on local shared file systems.
 </t>
-<t>
-A "store-only server" is a participating server where
-there is only remote access to IMA metadata.
+<t hangText="Store-only Server:">
+A participating server where
+there is only remote access to file content and IMA metadata.
 </t>
 </list>
 </t>
-</section>
-
-<section
- title="Instantiating IMA Metadata"
- anchor="section:548BF993-DE7D-4752-80C5-6628073606BE">
 <t>
-Once a file is written, IMA metadata is generated
-and signed by an appropriate trust authority.
-Using the OPTIONAL extension specified in this document,
-the information can be associated with a file
-on either a full-function server or client using
-a tool with appropriate privileges that writes IMA metadata
-to the shared file system.
-When using a store-only server, only a full-function client
-can place IMA metadata in the shared file system.
-</t>
-<t>
-Typically, once IMA metadata is associated with a file,
-the file's content is essentially immutable, even if the file
-has write permissions.
-This is because changing the content without updating the associated
-IMA metadata will make the content inaccessible,
-depending on the appraisal policy in effect.
-Thus updating the file content usually requires generating
-fresh IMA metadata.
-</t>
-
-</section>
-
-<section
- title="Interaction With Non-Participating Implementations"
- anchor="section:2004C060-4504-44A6-A702-CDCA40C006C6">
-<t>
-Because the protocol extension described herein is OPTIONAL,
-clients and servers that support it must necessarily interact
-with clients and servers that do not support it.
-To set the stage for a discussion of interactions that might occur,
-consider the following possible simple appraisal policies
-that might be adopted by an integrity assessment module:
+Lastly, we provide the following possible simple appraisal policies
+that might be applied by an integrity assessor:
 <list style="hanging">
 <t hangText="Strict:">
 Access is prevented to a file's content if the file has no IMA metadata
@@ -803,6 +771,37 @@ Access to file content is never prevented and IMA metadata is ignored.
 </t>
 </list>
 </t>
+
+</section>
+
+<section
+ title="Instantiating IMA Metadata"
+ anchor="section:548BF993-DE7D-4752-80C5-6628073606BE">
+<t>
+Once a file is written and closed,
+a specialized tool
+generates and signs the IMA metadata
+and then writes it to the shared file system.
+The tool can be used on a full-function client to sign
+files on a participating server.
+Or, the tool can be used on a full-function server to sign local files.
+The IMA metadata is then visible to participating clients.
+</t>
+<t>
+Typically, once IMA metadata is associated with a file,
+the file's content is essentially immutable, even if the file
+has write permissions.
+This is because changing the content without updating the associated
+IMA metadata will make the file's content inaccessible,
+depending on the appraisal policy in effect.
+Updating the file content requires generating fresh IMA metadata.
+</t>
+
+</section>
+
+<section
+ title="Interaction With Non-Participating Implementations"
+ anchor="section:2004C060-4504-44A6-A702-CDCA40C006C6">
 <t>
 Given the above example policies
 and the definitions we provided earlier for
@@ -812,11 +811,15 @@ the following statements are true:
 <t>
 A participating client that uses the Disabled policy
 is equivalent to
-a non-participating client.
+a non-participating client,
+except that a participating server is allowed to respond with
+NFS4ERR_INTEGRITY to a participating client.
 </t>
 <t>
 A non-participating client
-never prevents access to file content on a participating server.
+never prevents access to file content on a participating server,
+but a participating server that has a local integrity assessor
+may prevent access to a non-participating client.
 </t>
 <t>
 A participating client using the Strict policy
@@ -825,18 +828,29 @@ never allows access to files stored on a non-participating server.
 </list>
 </t>
 <t>
-An integrity assessor module on an NFS version 4.2 peer needs to be prepared to deal
+An integrity assessor on a participating NFS version 4.2 peer
+needs to be prepared to deal gracefully
 with IMA metadata it does not recognize or cannot parse.
 Its policy may treat this case as a appraisal failure.
 </t>
 <t>
-Note that an NFS version 4.2 server may use a integrity assessor module
-to prevent access by local users to protected files.
-To enable NFS version 4.2 clients to do their own assessment,
-an NFS version 4.2 server should not prevent remote access
-to participating clients
-if local integrity assessment fails.
+It is not required for an NFS version 4.2 server to
+implement an integrity assessor.
+However, some servers, such as the Linux NFS server, do just that,
+applying local IMA policy to both local and remote file accesses.
 </t>
+<t>
+If an appraisal failure occurs during a remote access,
+the server responds to a non-participating client with NFS4ERR_ACCESS
+or NFS4ERR_IO.
+The server's local policy can decide that a participating client sees
+NFS4ERR_INTEGRITY, or rather that the server allows access to the file content
+and IMA metadata so that the client's own IMA policies can be fully applied.
+</t>
+<t>
+[ cel: This is still an open issue. ]
+</t>
+
 </section>
 
 </section>
