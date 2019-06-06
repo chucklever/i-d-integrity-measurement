@@ -693,10 +693,10 @@ Otherwise it MUST respond with NFS4ERR_ACCESS.
  title="Terminology"
  anchor="section:54604E8A-1B3C-4571-B3EC-403567C43AF6">
 <t>
-Because the protocol extension described herein is OPTIONAL,
-clients and servers that support it must necessarily interact
+Because the protocol extension described in this document is OPTIONAL,
+clients and servers that support it will necessarily interact
 with clients and servers that do not support it.
-To aid the discussion in this section, we define a some terms:
+To aid the discussion in this section, we define the following terms:
 <list style="hanging">
 <t hangText="Integrity Assessor:">
 A security module separate from the file system
@@ -711,7 +711,7 @@ indicates this support to servers using the handshake described in
 <xref target="section:49517532-7084-4F57-A9E0-E6D9E539BD66"/>.
 </t>
 <t hangText="Non-participating Client:">
-An NFS version 4.2 client that
+An NFS client that
 does not support the OPTIONAL extension described in this document.
 </t>
 <t hangText="Participating Server:">
@@ -724,7 +724,7 @@ A participating server is not required to implement
 an integrity assessor.
 </t>
 <t hangText="Non-participating Server:">
-An NFS version 4.2 server that
+An NFS server that
 does not support the OPTIONAL extension described in this document.
 </t>
 </list>
@@ -781,20 +781,22 @@ Access to file content is never prevented and IMA metadata is ignored.
 Once a file is written and closed,
 a specialized tool
 generates and signs the IMA metadata
-and then writes it to the shared file system.
+and then writes it to the file system.
 The tool can be used on a full-function client to sign
 files on a participating server.
 Or, the tool can be used on a full-function server to sign local files.
-The IMA metadata is then visible to participating clients.
+The IMA metadata is then visible to participating clients
+and local users on the server (if there are any).
 </t>
 <t>
 Typically, once IMA metadata is associated with a file,
-the file's content is essentially immutable, even if the file
-has write permissions.
+the file's content is essentially immutable, even if the file's
+permissions settings permit writing to it.
 This is because changing the content without updating the associated
 IMA metadata will make the file's content inaccessible,
 depending on the appraisal policy in effect.
-Updating the file content requires generating fresh IMA metadata.
+Updating the file content requires generating fresh IMA metadata
+to prevent subsequent IMA appraisal failures.
 </t>
 
 </section>
@@ -803,9 +805,7 @@ Updating the file content requires generating fresh IMA metadata.
  title="Interaction With Non-Participating Implementations"
  anchor="section:2004C060-4504-44A6-A702-CDCA40C006C6">
 <t>
-Given the above example policies
-and the definitions we provided earlier for
-participating and non-participating implementations,
+Given the example policies and definitions we provided earlier,
 the following statements are true:
 <list style="symbols">
 <t>
@@ -848,7 +848,7 @@ NFS4ERR_INTEGRITY, or rather that the server allows access to the file content
 and IMA metadata so that the client's own IMA policies can be fully applied.
 </t>
 <t>
-[ cel: This is still an open issue. ]
+[ cel: Permitting remote access to files that fail a local integrity check is still an open issue. ]
 </t>
 
 </section>
@@ -914,13 +914,12 @@ No comments from implementors.
  title="Security Considerations"
  anchor="section:83D5C960-0148-42FA-93E4-3DE7F96EFD34">
 <t>
-The design of the OPTIONAL extension described in this document assumes that
-all IMA metadata is keyed or otherwise cryptographically
-signed by a trust authority
+The design of the NFS extension described in this document assumes
+that all IMA metadata is cryptographically signed
 to prevent unwanted alteration at rest or in transit.
 </t>
 <t>
-When IMA metadata for a file exists and the end host has adopted an IMA policy,
+When IMA metadata for a file exists and the end host has an IMA assessor,
 the content of a file is protected from creation to use.
 Receivers can reliably detect unintentional or malicious alteration of file content
 by verifying its content using the file's IMA metadata.
