@@ -138,8 +138,32 @@ this description is not necessary to implement the extension.
  title="IMA Metadata"
  anchor="section:61675D23-3584-407E-BBB3-346DD170BFA1">
 <t>
-A cryptographically signed hash
-stored separately from a file's content
+First, it is important to understand the distinction between
+a checksum,
+a hash,
+and a cryptographically-signed hash.
+<list style="symbols">
+<t>
+A checksum, or parity, is designed to detect and possibly correct
+one or two bit errors in a fixed amount of content.
+</t>
+<t>
+A hash's purpose is to detect both accidental and malicious
+alterations.
+Typically a hash is a small fixed size, but can be computed
+over a very large amount of content.
+</t>
+<t>
+A cryptographically-signed hash is the basis for a digital signature.
+The signatory of a cryptographically-signed hash gives a guarantee
+that the hash, and therefore the hashed content, has not been changed,
+since the hash was signed.
+</t>
+</list>
+</t>
+<t>
+A cryptographically-signed hash
+stored separately from a file's content therefore
 serves as a strong check of file content integrity
 and
 authenticates the identity of the provider of the file's content.
@@ -161,8 +185,8 @@ The precise format of this metadata is determined by policies
 set by the local security administrator;
 the metadata and its format are opaque to the mechanisms that store
 or transport it (i.e., file systems).
-The particulars of the PKI and the hash algorithm
-are agreed upon out-of-band
+The particulars of the PKI and the hash algorithm are
+set by local policy, which is agreed upon out-of-band
 and recognized by all participating IMA subsystems.
 </t>
 </section>
