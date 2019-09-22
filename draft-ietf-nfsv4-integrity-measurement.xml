@@ -475,9 +475,6 @@ permissions setting but rather because an integrity check failed.
 This distinction can guide the user or client towards a recovery
 action that is appropriate.
 </t>
-<t>
-[ cel: this is still an open issue ]
-</t>
 
 </section>
 
@@ -592,7 +589,7 @@ The server may allow IMA metadata updates only by the file's owner or group owne
 </list>
 </t>
 <t>
-[ cel: this is still an open issue. ]
+[ cel: this is open issue https://github.com/chucklever/i-d-integrity-measurement/issues/4 ]
 </t>
 
 </section>
@@ -848,7 +845,8 @@ NFS4ERR_INTEGRITY, or rather that the server allows access to the file content
 and IMA metadata so that the client's own IMA policies can be fully applied.
 </t>
 <t>
-[ cel: Permitting remote access to files that fail a local integrity check is still an open issue. ]
+[ cel: Permitting remote access to files that fail a local integrity check is still an open issue.
+This is https://github.com/chucklever/i-d-integrity-measurement/issues/5 ]
 </t>
 
 </section>
