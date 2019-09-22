@@ -1,6 +1,6 @@
-# File Content Provenance for Network File System version 4
+# Integrity Measurement for Network File System version 4
 
-This is the working area for the IETF [NFSV4 Working Group](https://datatracker.ietf.org/wg/nfsv4/documents/) Internet-Draft, "File Content Provenance for Network File System version 4".
+This is the working area for the IETF [NFSV4 Working Group](https://datatracker.ietf.org/wg/nfsv4/documents/) Internet-Draft, "Integrity Measurement for Network File System version 4".
 
 * [Editor's Copy](https://chucklever.github.io/i-d-integrity-measurement/#go.draft-ietf-nfsv4-integrity-measurement.html)
 * [Working Group Draft](https://tools.ietf.org/html/draft-ietf-nfsv4-integrity-measurement)
