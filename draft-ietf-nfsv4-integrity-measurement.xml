@@ -950,15 +950,13 @@ applying local IMA policy to both local and remote file accesses.
 </t>
 <t>
 If an appraisal failure occurs during a remote access,
-the server responds to a legacy client with NFS4ERR_ACCESS
-or NFS4ERR_IO.
-The server's local policy can decide that a participating client sees
-NFS4ERR_INTEGRITY, or rather that the server allows access to the file content
-and IMA metadata so that the client's own IMA policies can be fully applied.
-</t>
-<t>
-[ cel: Permitting remote access to files that fail a local integrity check is still an open issue.
-This is https://github.com/chucklever/i-d-integrity-measurement/issues/5 ]
+a participating server responds to a legacy client with NFS4ERR_ACCESS.
+The server's local policy decides exactly what a participating client sees:
+Possibilities include
+an NFS4ERR_INTEGRITY response (and access to the file is denied),
+or
+access to the file content and IMA metadata may be permitted so that
+the client's own IMA policies can be applied.
 </t>
 
 </section>
