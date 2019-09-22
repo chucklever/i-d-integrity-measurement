@@ -657,31 +657,44 @@ only by appropriately authorized agents.
 Although access to file content is typically controlled by
 ACLs and permission bits,
 these mechanisms do not apply to IMA metadata.
-The question of "who is authorized to modify IMA metadata"
-is left to local security policy.
 </t>
 <t>
-Possible implementations include limiting IMA metadata update authority to:
+The question of "who is authorized to modify IMA metadata"
+is often left to the server's local IMA security policy.
+In addition, the issue of whether to allow a particular
+IMA metadata update has no bearing on protocol
+interoperability,
+as long as the server sticks to returning NFS4ERR_ACCESS
+or NFS4ERR_INTEGRITY, as appropriate.
+Thus, to enable server implementation flexibility,
+the current document treats the following recommendations as
+implementation guidance rather than as normative protocol requirements.
+</t>
+<t>
+Possible NFS server implementations include limiting IMA metadata update authority
+in the following ways:
 <list style="hanging">
 <t hangText="Particular users">
 <vspace/>
-The server may allow IMA metadata updates only by
+A server might allow IMA metadata updates only by
 UID 0
 or
 by a client's machine principal.
 </t>
 <t hangText="Particular clients">
 <vspace/>
-The server may allow IMA metadata updates only from specific client IP addresses.
+A server might allow IMA metadata updates only from specific client IP addresses.
 </t>
 <t hangText="File owners">
 <vspace/>
-The server may allow IMA metadata updates only by the file's owner or group owner.
+A server might allow IMA metadata updates only by the file's owner or group owner.
+</t>
+<t hangText="No remote updates">
+<vspace/>
+A server might always return NFS4ERR_ACCESS when an NFS client sends a SETATTR
+request that updates IMA metadata.
 </t>
 </list>
-</t>
-<t>
-[ cel: this is open issue https://github.com/chucklever/i-d-integrity-measurement/issues/4 ]
 </t>
 
 </section>
