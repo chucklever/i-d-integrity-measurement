@@ -266,6 +266,74 @@ that is not interpreted by the file system itself.
 
 </section>
 
+<section
+ title="An Illustrative Use Case"
+ anchor="section:DFCFDF63-1A15-4DC2-958A-9CD6BABF9F65">
+<t>
+To help the reader grasp how IMA on NFS might be used in practice,
+this section contains a decription of an IMA use case.
+The purpose of using IMA here is to provide a guarantee that a
+set of users that are executing a commercial software product
+are indeed using the same binary executable and libraries
+that were developed and tested by the product's vendor.
+</t>
+<t>
+To publish a software product, a vendor might do the following:
+<list style="numbers">
+<t>
+The vendor generates a key pair and publishes the public key.
+</t>
+<t>
+The vendor finalizes a version of its software product.
+</t>
+<t>
+The vendor generates a hash of each file in the product's
+distribution manifest, and signs each hash with its private key.
+</t>
+<t>
+The vendor publishes the product's files and the signed hashes.
+</t>
+</list>
+</t>
+<t>
+To install and use the vendor's product, a customer might do
+the following:
+<list style="numbers">
+<t>
+The customer installs the files and the signed hashes in a
+local filesystem.
+</t>
+<t>
+When a user executes one of the files, a local security module
+reads the file from disk and computes a hash of its content.
+This is the measurement step, which happens when each file
+is loaded into the system's page cache.
+</t>
+<t>
+The security module uses the vendor's public key to verify
+the signature of the file's stored hash, and confirms that the
+locally computed hash matches the stored hash.
+This is the appraisal step, which happens when each file is
+about to be executed.
+</t>
+<t>
+If the locally computed hash is verified, the security module
+allows the operating system to execute the program.
+If not, then the program fails to execute and an integrity
+error is logged.
+</t>
+</list>
+</t>
+<t>
+The purpose of the NFS extension specified in the current document
+is to enable the signed hashes in the above example to be stored
+by an NFS server and retrieved by NFS clients.
+Each NFS client could then verify that neither the NFS server nor
+an active network agent had altered file content before it was
+used on the NFS client.
+</t>
+</section>
+
 </section>
 
 <section
