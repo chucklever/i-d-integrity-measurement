@@ -787,20 +787,20 @@ clients and servers that support it will necessarily interact
 with clients and servers that do not support it.
 To aid the discussion in this section, we define the following terms:
 <list style="hanging">
-<t hangText="Integrity Assessor:">
-A security module separate from the file system
+<t hangText="Appraiser:">
+A security module separate from the storage system
 that appraises file content based on a policy and
 IMA measurement results.
 </t>
 <t hangText="Participating Client:">
 An NFS version 4.2 client that
-employs a integrity assessor,
+employs an appraiser,
 supports the OPTIONAL extension described in this document, and
-indicates this support to servers using the handshake described in
+indicates this support to NFS servers using the handshake described in
 <xref target="section:49517532-7084-4F57-A9E0-E6D9E539BD66"/>.
 </t>
-<t hangText="Non-participating Client:">
-An NFS client that
+<t hangText="Legacy Client:">
+Any NFS client that
 does not support the OPTIONAL extension described in this document.
 </t>
 <t hangText="Participating Server:">
@@ -810,10 +810,10 @@ indicates this support to clients using the handshake described in
 <xref target="section:49517532-7084-4F57-A9E0-E6D9E539BD66"/>, and
 its shared file systems can store IMA metadata.
 A participating server is not required to implement
-an integrity assessor.
+an appraiser.
 </t>
-<t hangText="Non-participating Server:">
-An NFS server that
+<t hangText="Legacy Server:">
+Any NFS server that
 does not support the OPTIONAL extension described in this document.
 </t>
 </list>
@@ -833,7 +833,7 @@ on a participating server.
 A participating server that
 has a local user execution environment and
 supports updating IMA metadata
-that resides on local shared file systems.
+that resides on shared local file systems.
 </t>
 <t hangText="Store-only Server:">
 A participating server where
@@ -843,7 +843,7 @@ there is only remote access to file content and IMA metadata.
 </t>
 <t>
 Lastly, we provide the following possible simple appraisal policies
-that might be applied by an integrity assessor:
+that might be applied by an appraiser:
 <list style="hanging">
 <t hangText="Strict:">
 Access is prevented to a file's content if the file has no IMA metadata
@@ -856,7 +856,8 @@ Warnings are reported when a file has no IMA metadata
 or when extant IMA metadata fails to verify the file's content.
 </t>
 <t hangText="Disabled:">
-Access to file content is never prevented and IMA metadata is ignored.
+IMA metadata is ignored and
+access to file content is never prevented.
 </t>
 </list>
 </t>
@@ -876,6 +877,8 @@ files on a participating server.
 Or, the tool can be used on a full-function server to sign local files.
 The IMA metadata is then visible to participating clients
 and local users on the server (if there are any).
+Or, an enhanced version of cpio or rsync might copy the metadata
+into place as part of an installation procedure.
 </t>
 <t>
 Typically, once IMA metadata is associated with a file,
@@ -884,14 +887,19 @@ permissions settings permit writing to it.
 This is because changing the content without updating the associated
 IMA metadata will make the file's content inaccessible,
 depending on the appraisal policy in effect.
-Updating the file content requires generating fresh IMA metadata
+</t>
+<t>
+Updating file content requires access to a signing key
+in order to generate fresh IMA metadata
 to prevent subsequent IMA appraisal failures.
+Typically a key like this will be well-protected, and thus
+not available on NFS clients.
 </t>
 
 </section>
 
 <section
- title="Interaction With Non-Participating Implementations"
+ title="Interaction With Legacy Implementations"
  anchor="section:2004C060-4504-44A6-A702-CDCA40C006C6">
 <t>
 Given the example policies and definitions we provided earlier,
@@ -899,38 +907,37 @@ the following statements are true:
 <list style="symbols">
 <t>
 A participating client that uses the Disabled policy
-is equivalent to
-a non-participating client,
+is equivalent to a legacy client,
 except that a participating server is allowed to respond with
 NFS4ERR_INTEGRITY to a participating client.
 </t>
 <t>
-A non-participating client
+A legacy client
 never prevents access to file content on a participating server,
-but a participating server that has a local integrity assessor
-may prevent access to a non-participating client.
+but a participating server that has a local appraiser
+may prevent access of a corrupted file to a legacy client.
 </t>
 <t>
 A participating client using the Strict policy
-never allows access to files stored on a non-participating server.
+never allows access to files stored on a legacy server.
 </t>
 </list>
 </t>
 <t>
-An integrity assessor on a participating NFS version 4.2 peer
+An appraiser on a participating NFS version 4.2 peer
 needs to be prepared to deal gracefully
 with IMA metadata it does not recognize or cannot parse.
-Its policy may treat this case as a appraisal failure.
+Its policy may treat this case as an appraisal failure.
 </t>
 <t>
 It is not required for an NFS version 4.2 server to
-implement an integrity assessor.
+implement an appraiser.
 However, some servers, such as the Linux NFS server, do just that,
 applying local IMA policy to both local and remote file accesses.
 </t>
 <t>
 If an appraisal failure occurs during a remote access,
-the server responds to a non-participating client with NFS4ERR_ACCESS
+the server responds to a legacy client with NFS4ERR_ACCESS
 or NFS4ERR_IO.
 The server's local policy can decide that a participating client sees
 NFS4ERR_INTEGRITY, or rather that the server allows access to the file content
@@ -1009,7 +1016,7 @@ that all IMA metadata is cryptographically signed
 to prevent unwanted alteration at rest or in transit.
 </t>
 <t>
-When IMA metadata for a file exists and the end host has an IMA assessor,
+When IMA metadata for a file exists and the end host has an active appraiser,
 the content of a file is protected from creation to use.
 Receivers can reliably detect unintentional or malicious alteration of file content
 by verifying its content using the file's IMA metadata.
