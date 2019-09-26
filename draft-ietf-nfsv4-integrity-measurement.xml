@@ -651,50 +651,25 @@ the server MUST respond with NFS4ERR_INVAL.
  title="Authorizing Updates to IMA Metadata"
  anchor="C17FEFF5-F9F8-46C4-AC3D-1B04DF704752">
 <t>
-An NFS version 4.2 server needs to ensure
-that modifications to IMA metadata are done
-only by appropriately authorized agents.
-Although access to file content is typically controlled by
-ACLs and permission bits,
-these mechanisms do not apply to IMA metadata.
+Typically an NFS server allows a user
+to update a file's IMA metadata
+whenever that user is permitted to modify that file's
+byte content.
+This is consistent with similar mechanisms already used
+throughout the NFS version 4 protocol;
+e.g., setting an ACL.
+If an NFS server determines that a user requesting
+a SETATTR with the FATTR4_IMA attribute
+is not authorized to update the IMA metadata,
+the SETATTR operation MUST return NFS4ERR_PERM.
 </t>
 <t>
-The question of "who is authorized to modify IMA metadata"
-is often left to the server's local IMA security policy.
-In addition, the issue of whether to allow a particular
-IMA metadata update has no bearing on protocol
-interoperability,
-as long as the server sticks to returning NFS4ERR_ACCESS
-or NFS4ERR_INTEGRITY, as appropriate.
-Thus, to enable server implementation flexibility,
-the current document treats the following recommendations as
-implementation guidance rather than as normative protocol requirements.
-</t>
-<t>
-Possible NFS server implementations include limiting IMA metadata update authority
-in the following ways:
-<list style="hanging">
-<t hangText="Particular users">
-<vspace/>
-A server might allow IMA metadata updates only by
-UID 0
-or
-by a client's machine principal.
-</t>
-<t hangText="Particular clients">
-<vspace/>
-A server might allow IMA metadata updates only from specific client IP addresses.
-</t>
-<t hangText="File owners">
-<vspace/>
-A server might allow IMA metadata updates only by the file's owner or group owner.
-</t>
-<t hangText="No remote updates">
-<vspace/>
-A server might always return NFS4ERR_ACCESS when an NFS client sends a SETATTR
-request that updates IMA metadata.
-</t>
-</list>
+If an NFS server implementation does not support
+modification of IMA metadata via NFS,
+the server MUST return NFS4ERR_INVAL to a
+SETATTR request with the FATTR4_IMA attribute,
+as required by Section 5.5 of
+<xref target="RFC5661"/>.
 </t>
 
 </section>
