@@ -651,17 +651,16 @@ the server MUST respond with NFS4ERR_INVAL.
  title="Authorizing Updates to IMA Metadata"
  anchor="C17FEFF5-F9F8-46C4-AC3D-1B04DF704752">
 <t>
-Typically an NFS server allows a user
-to update a file's IMA metadata
+An NFS server permits a user to replace a file's IMA metadata
 whenever that user is permitted to modify that file's
 byte content.
 This is consistent with similar mechanisms already used
 throughout the NFS version 4 protocol;
-e.g., setting an ACL.
+for instance, setting an ACL.
 If an NFS server determines that a user requesting
 a SETATTR with the FATTR4_IMA attribute
 is not authorized to update the IMA metadata,
-the SETATTR operation MUST return NFS4ERR_PERM.
+the SETATTR operation MUST return NFS4ERR_ACCESS.
 </t>
 <t>
 If an NFS server implementation does not support
