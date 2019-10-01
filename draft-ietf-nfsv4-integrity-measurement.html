@@ -1,0 +1,846 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+
+  <title>Integrity Measurement for Network File System version 4 </title>
+
+  
+<style type="text/css">/*<![CDATA[*/
+
+body {
+  font: 16px "Helvetica Neue","Open Sans",Helvetica,Calibri,sans-serif;
+  color: #333;
+  font-size-adjust: 0.5;
+  line-height: 24px;
+  margin: 75px auto;
+  max-width: 624px;
+  padding: 0 5px;
+}
+
+.title, .filename, h1, h2, h3, h4, h5 {
+  font: 16px "Roboto Condensed","Helvetica Neue","Open Sans",Helvetica,Calibri,sans-serif;
+  font-size-adjust: 0.5;
+  font-weight: bold;
+  color: #333;
+  line-height: 100%;
+  margin: 1.2em 0 0.3em;
+}
+.title, #rfc\.title h1 { font-size: 32px; }
+h1, section h1, h2, section h2, section h3, nav h2 { font-size: 20px; }
+h3, section h4, h4, section h5 { font-size: 16px; }
+h1 a[href], h2 a[href], h3 a[href], h4 a[href] {
+  color: #333;
+}
+
+table {
+  margin-left: 0em;
+  border-collapse: collapse;
+}
+th {
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+}
+td {
+  border-top: 1px solid #ddd;
+  vertical-align: top;
+}
+tr:nth-child(2n+1) > td,
+tr:nth-child(2n+1) > th {
+  background-color: #f9f9f9;
+}
+td.reference {
+  max-width: 200px;
+  border-top: none;
+  padding-right: 1em;
+}
+.right {
+  text-align: right;
+}
+
+
+table.header, table#rfc\.headerblock {
+  width: 100%;
+}
+table.header td, table#rfc\.headerblock td {
+  border: none;
+  background-color: transparent;
+  color: black;
+  padding: 0;
+}
+.filename {
+  display: block;
+  color: rgb(119, 119, 119);
+  font-size: 20px;
+  font-weight: normal;
+  line-height: 100%;
+  margin: 10px 0 32px;
+}
+#rfc\.abstract+p, #rfc\.abstract+p code, #rfc\.abstract+p samp, #rfc\.abstract+p tt {
+  font-size: 20px;
+  line-height: 28px;
+}
+
+samp, tt, code, pre, span.tt {
+  font-size: 13.5px;
+  font-family: Consolas, monospace;
+  font-size-adjust: none;
+}
+pre {
+  background-color: #eee;
+  border: 1px solid #ddd;
+  overflow-x: auto;
+  padding: 5px;
+  margin: 5px;
+}
+.figure, caption {
+  font-style: italic;
+  margin: 0 1.5em;
+  text-align: left;
+}
+
+address {
+  margin: 16px 2px;
+  line-height: 20px;
+}
+.vcard {
+  font-style: normal;
+}
+.vcardline {
+  display: block;
+}
+.vcardline .fn, address b {
+  font-weight: normal;
+}
+.vcardline .hidden {
+  display: none;
+}
+
+dl {
+  margin-left: 1em;
+}
+dl.dl-horizontal: {
+  margin-left: 0;
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.nohang > dt {
+  float: none;
+}
+dl > dd {
+  margin-bottom: .5em;
+}
+dl.compact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+ul.empty {
+  list-style-type: none;
+}
+ul.empty li {
+  margin-top: .5em;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+hr.noprint {
+  display: none;
+}
+
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #2a6496;
+}
+a[href]:hover {
+  background-color: #eee;
+}
+
+p, ol, ul, li {
+  padding: 0;
+}
+p {
+  margin: 0.5em 0;
+}
+ol, ul {
+  margin: 0.2em 0 0.2em 2em;
+}
+li {
+  margin: 0.2em 0;
+}
+address {
+  font-style: normal;
+}
+
+ul.toc ul {
+  margin: 0 0 0 2em;
+}
+ul.toc li {
+  list-style: none;
+  margin: 0;
+}
+
+@media screen and (min-width: 924px) {
+  body {
+    padding-right: 350px;
+  }
+  body>ul.toc, body>#rfc\.toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 500px);
+    width: 300px;
+    z-index: 1;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  body>#rfc\.toc {
+    top: 55px;
+  }
+  body>ul.toc {
+    top: 100px;
+  }
+
+  ul.toc {
+    margin: 0 0 0 4px;
+    font-size: 12px;
+    line-height: 20px;
+  }
+  ul.toc ul {
+    margin-left: 1.2em;
+  }
+}
+
+.github-fork-ribbon-wrapper {
+  display: none;
+}
+@media screen and (min-width: 800px) {
+  /* "Fork me on GitHub" CSS ribbon based on
+   * https://github.com/simonwhitaker/github-fork-ribbon-css
+   */
+  .github-fork-ribbon {
+    position: absolute;
+    padding: 2px 0;
+    background-color: #a00;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);
+    font: 700 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    pointer-events: auto;
+
+    top: 38px;
+    right: -45px;
+
+    transform: rotate(45deg);
+  }
+
+  .github-fork-ribbon a[href],
+  .github-fork-ribbon a[href]:hover {
+    color: #fff;
+    background-color: transparent;
+    text-decoration: none;
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
+    text-align: center;
+
+    width: 190px;
+    line-height: 18px;
+
+    display: inline-block;
+    padding: 2px 0;
+
+    border: 1.5px dotted #fff;
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .github-fork-ribbon-wrapper {
+    display: block;
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    overflow: hidden;
+    top: 0; right: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+}
+@media screen and (min-width: 1000px) {
+  .github-fork-ribbon-wrapper {
+    position: fixed;
+  }
+  /*]]>*/</style>
+  <meta name="viewport" content="initial-scale=1.0">
+
+
+  <link href="#rfc.toc" rel="Contents">
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction">
+<link href="#rfc.section.1.1" rel="Chapter" title="1.1 The Linux Integrity Measurement Architecture">
+<link href="#rfc.section.1.1.1" rel="Chapter" title="1.1.1 IMA Metadata">
+<link href="#rfc.section.1.1.2" rel="Chapter" title="1.1.2 Creating and Verifying IMA Metadata">
+<link href="#rfc.section.1.1.3" rel="Chapter" title="1.1.3 Distributing and Protecting Keying Material">
+<link href="#rfc.section.1.1.4" rel="Chapter" title="1.1.4 Using IMA to Protect NFS Files">
+<link href="#rfc.section.1.2" rel="Chapter" title="1.2 An Illustrative Use Case">
+<link href="#rfc.section.2" rel="Chapter" title="2 Requirements Language">
+<link href="#rfc.section.3" rel="Chapter" title="3 Protocol Extension Considerations">
+<link href="#rfc.section.3.1" rel="Chapter" title="3.1 XDR Extraction">
+<link href="#rfc.section.4" rel="Chapter" title="4 Managing IMA Metadata on NFS Files">
+<link href="#rfc.section.4.1" rel="Chapter" title="4.1 XDR Definition">
+<link href="#rfc.section.4.1.1" rel="Chapter" title="4.1.1 NFS4ERR_INTEGRITY (Error Code YYYYY)">
+<link href="#rfc.section.4.2" rel="Chapter" title="4.2 Detecting support for IMA Metadata">
+<link href="#rfc.section.4.2.1" rel="Chapter" title="4.2.1 Reporting Server-Side IMA Appraisal Failures">
+<link href="#rfc.section.4.3" rel="Chapter" title="4.3 Storing IMA Metadata">
+<link href="#rfc.section.4.3.1" rel="Chapter" title="4.3.1 Sending IMA Metadata When Creating a New Object">
+<link href="#rfc.section.4.3.2" rel="Chapter" title="4.3.2 Authorizing Updates to IMA Metadata">
+<link href="#rfc.section.4.4" rel="Chapter" title="4.4 Retrieving IMA Metadata">
+<link href="#rfc.section.4.5" rel="Chapter" title="4.5 Using NFS Attribute Fencing (VERIFY/NVERIFY)">
+<link href="#rfc.section.5" rel="Chapter" title="5 Deployment Examples">
+<link href="#rfc.section.5.1" rel="Chapter" title="5.1 Terminology">
+<link href="#rfc.section.5.2" rel="Chapter" title="5.2 Instantiating IMA Metadata">
+<link href="#rfc.section.5.3" rel="Chapter" title="5.3 Interaction With Legacy Implementations">
+<link href="#rfc.section.6" rel="Chapter" title="6 Implementation Status">
+<link href="#rfc.section.6.1" rel="Chapter" title="6.1 Linux NFS server and client">
+<link href="#rfc.section.7" rel="Chapter" title="7 Security Considerations">
+<link href="#rfc.section.8" rel="Chapter" title="8 IANA Considerations">
+<link href="#rfc.references" rel="Chapter" title="9 References">
+<link href="#rfc.references.1" rel="Chapter" title="9.1 Normative References">
+<link href="#rfc.references.2" rel="Chapter" title="9.2 Informative References">
+<link href="#rfc.acknowledgments" rel="Chapter">
+<link href="#rfc.authors" rel="Chapter">
+
+
+  <meta name="generator" content="xml2rfc version 2.31.0 - https://tools.ietf.org/tools/xml2rfc" />
+  <link rel="schema.dct" href="http://purl.org/dc/terms/" />
+
+  <meta name="dct.creator" content="Lever, C." />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-nfsv4-integrity-measurement-latest" />
+  <meta name="dct.issued" scheme="ISO8601" content="2019-01" />
+  <meta name="dct.abstract" content="This document specifies an OPTIONAL extension to NFS version 4 minor version 2 that enables Linux Integrity Measurement Architecture metadata (IMA) to be conveyed between NFS version 4.2 servers and clients.  Integrity measurement authenticates the creator of a file's content and helps guarantee the content's integrity end-to-end from creation to use.  " />
+  <meta name="description" content="This document specifies an OPTIONAL extension to NFS version 4 minor version 2 that enables Linux Integrity Measurement Architecture metadata (IMA) to be conveyed between NFS version 4.2 servers and clients.  Integrity measurement authenticates the creator of a file's content and helps guarantee the content's integrity end-to-end from creation to use.  " />
+
+</head>
+
+<body>
+
+  <table class="header">
+    <tbody>
+    
+    	<tr>
+<td class="left">Network File System Version 4</td>
+<td class="right">C. Lever</td>
+</tr>
+<tr>
+<td class="left">Internet-Draft</td>
+<td class="right">Oracle</td>
+</tr>
+<tr>
+<td class="left">Intended status: Standards Track</td>
+<td class="right">October 1, 2019</td>
+</tr>
+<tr>
+<td class="left">Expires: April 3, 2020</td>
+<td class="right"></td>
+</tr>
+
+    	
+    </tbody>
+  </table>
+
+  <p class="title">Integrity Measurement for Network File System version 4 <br />
+  <span class="filename">draft-ietf-nfsv4-integrity-measurement-latest</span></p>
+  
+  <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
+<p>This document specifies an OPTIONAL extension to NFS version 4 minor version 2 that enables Linux Integrity Measurement Architecture metadata (IMA) to be conveyed between NFS version 4.2 servers and clients.  Integrity measurement authenticates the creator of a file's content and helps guarantee the content's integrity end-to-end from creation to use.  </p>
+<h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
+<p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
+<p>This Internet-Draft will expire on April 3, 2020.</p>
+<h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
+<p>Copyright (c) 2019 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
+
+  
+  <hr class="noprint" />
+  <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
+  <ul class="toc">
+
+  	<li>1.   <a href="#rfc.section.1">Introduction</a>
+</li>
+<ul><li>1.1.   <a href="#rfc.section.1.1">The Linux Integrity Measurement Architecture</a>
+</li>
+<ul><li>1.1.1.   <a href="#rfc.section.1.1.1">IMA Metadata</a>
+</li>
+<li>1.1.2.   <a href="#rfc.section.1.1.2">Creating and Verifying IMA Metadata</a>
+</li>
+<li>1.1.3.   <a href="#rfc.section.1.1.3">Distributing and Protecting Keying Material</a>
+</li>
+<li>1.1.4.   <a href="#rfc.section.1.1.4">Using IMA to Protect NFS Files</a>
+</li>
+</ul><li>1.2.   <a href="#rfc.section.1.2">An Illustrative Use Case</a>
+</li>
+</ul><li>2.   <a href="#rfc.section.2">Requirements Language</a>
+</li>
+<li>3.   <a href="#rfc.section.3">Protocol Extension Considerations</a>
+</li>
+<ul><li>3.1.   <a href="#rfc.section.3.1">XDR Extraction</a>
+</li>
+</ul><li>4.   <a href="#rfc.section.4">Managing IMA Metadata on NFS Files</a>
+</li>
+<ul><li>4.1.   <a href="#rfc.section.4.1">XDR Definition</a>
+</li>
+<ul><li>4.1.1.   <a href="#rfc.section.4.1.1">NFS4ERR_INTEGRITY (Error Code YYYYY)</a>
+</li>
+</ul><li>4.2.   <a href="#rfc.section.4.2">Detecting support for IMA Metadata</a>
+</li>
+<ul><li>4.2.1.   <a href="#rfc.section.4.2.1">Reporting Server-Side IMA Appraisal Failures</a>
+</li>
+</ul><li>4.3.   <a href="#rfc.section.4.3">Storing IMA Metadata</a>
+</li>
+<ul><li>4.3.1.   <a href="#rfc.section.4.3.1">Sending IMA Metadata When Creating a New Object</a>
+</li>
+<li>4.3.2.   <a href="#rfc.section.4.3.2">Authorizing Updates to IMA Metadata</a>
+</li>
+</ul><li>4.4.   <a href="#rfc.section.4.4">Retrieving IMA Metadata</a>
+</li>
+<li>4.5.   <a href="#rfc.section.4.5">Using NFS Attribute Fencing (VERIFY/NVERIFY)</a>
+</li>
+</ul><li>5.   <a href="#rfc.section.5">Deployment Examples</a>
+</li>
+<ul><li>5.1.   <a href="#rfc.section.5.1">Terminology</a>
+</li>
+<li>5.2.   <a href="#rfc.section.5.2">Instantiating IMA Metadata</a>
+</li>
+<li>5.3.   <a href="#rfc.section.5.3">Interaction With Legacy Implementations</a>
+</li>
+</ul><li>6.   <a href="#rfc.section.6">Implementation Status</a>
+</li>
+<ul><li>6.1.   <a href="#rfc.section.6.1">Linux NFS server and client</a>
+</li>
+</ul><li>7.   <a href="#rfc.section.7">Security Considerations</a>
+</li>
+<li>8.   <a href="#rfc.section.8">IANA Considerations</a>
+</li>
+<li>9.   <a href="#rfc.references">References</a>
+</li>
+<ul><li>9.1.   <a href="#rfc.references.1">Normative References</a>
+</li>
+<li>9.2.   <a href="#rfc.references.2">Informative References</a>
+</li>
+</ul><li><a href="#rfc.acknowledgments">Acknowledgments</a>
+</li>
+<li><a href="#rfc.authors">Author's Address</a>
+</li>
+
+
+  </ul>
+
+  <h1 id="rfc.section.1">
+<a href="#rfc.section.1">1.</a> <a href="#section:B6F50BDB-73AC-4DCE-9254-00386F6277FC" id="section:B6F50BDB-73AC-4DCE-9254-00386F6277FC">Introduction</a>
+</h1>
+<p id="rfc.section.1.p.1">The security of software distribution systems is complex and challenging, especially as software distribution has become increasingly decentralized.  An end administrator needs to trust that she is running executables just as they are supplied by a software vendor; in other words, that they have not been modified by malicious actors, contracted system administration services, or broken hardware or software.  Software vendors want a guarantee that customer-installed executables that fall under support contracts have similarly not been modified.  </p>
+<p id="rfc.section.1.p.2">There already exist mechanisms that protect file data during certain portions of a file's life cycle: </p>
+
+<ul>
+<li>Whole file system checksumming can verify so-called Golden Master installation media before it is used to install the software it contains.  </li>
+<li>File or block integrity mechanisms can protect data at rest on storage servers.  </li>
+<li>For a distributed file system such as NFS, transport layer security or a GSS integrity service (as described in <a href="#RFC7861" class="xref">[RFC7861]</a>) can protect data while it traverses a network between a storage server and a client.  </li>
+</ul>
+
+<p> A more extensive mechanism is needed to guarantee that no modification of a particular file has occurred since it was created, perhaps even after several generations of copies have been made of the file's content.  </p>
+<h2 id="rfc.section.1.1">
+<a href="#rfc.section.1.1">1.1.</a> <a href="#section:F09E4A19-531B-4771-A5AD-42B14E0BC030" id="section:F09E4A19-531B-4771-A5AD-42B14E0BC030">The Linux Integrity Measurement Architecture</a>
+</h2>
+<p id="rfc.section.1.1.p.1">The Linux Integrity Measurement Architecture (IMA) <a href="#SAILER" class="xref">[SAILER]</a> provides assurance that the content of a file is unaltered and authentic to what was originally written to that file.  The goal is to detect when an attacker, unintentional platform behavior, or local tinkering has modified the content of a file, either in transit or at rest.  </p>
+<p id="rfc.section.1.1.p.2">This is done by separately storing metadata about a file's content and then using that metadata to verify the content before it is used.  Verification of the content is entirely independent of the file system.  File systems, both local and remote, act simply as storage for both the content and the metadata, both of which are opaque to the storage subsystem.  </p>
+<p id="rfc.section.1.1.p.3">An informative description of this mechanism is presented in the following subsections to provide context for understanding the NFS protocol extension described later in this document.  As the file system does not interpret IMA metadata, this description is not necessary to implement the extension.  </p>
+<h3 id="rfc.section.1.1.1">
+<a href="#rfc.section.1.1.1">1.1.1.</a> <a href="#section:61675D23-3584-407E-BBB3-346DD170BFA1" id="section:61675D23-3584-407E-BBB3-346DD170BFA1">IMA Metadata</a>
+</h3>
+<p id="rfc.section.1.1.1.p.1">First, it is important to understand the distinction between a checksum, a hash, and a cryptographically-signed hash.  </p>
+
+<ul>
+<li>A checksum, or parity, is designed to detect and possibly correct one or two bit errors in a fixed amount of content.  </li>
+<li>A hash's purpose is to detect both accidental and malicious alterations.  Typically a hash is a small fixed size, but can be computed over a very large amount of content.  </li>
+<li>A cryptographically-signed hash is the basis for a digital signature.  The signatory of a cryptographically-signed hash gives a guarantee that the hash, and therefore the hashed content, has not been changed, since the hash was signed.  </li>
+</ul>
+
+<p> </p>
+<p id="rfc.section.1.1.1.p.2">A cryptographically-signed hash stored separately from a file's content therefore serves as a strong check of file content integrity and authenticates the identity of the provider of the file's content.  The signer is verified at time of content use via a web of trust commonly provided by PKI or x.509 certificates <a href="#RFC4158" class="xref">[RFC4158]</a>.  </p>
+<p id="rfc.section.1.1.1.p.3">The hash is typically computed using either the SHA-1 or SHA-256 algorithm and is stored as an HMAC <a href="#RFC2104" class="xref">[RFC2104]</a>.  For the purposes of this document, the current document refers to this blob as "IMA metadata".  </p>
+<p id="rfc.section.1.1.1.p.4">The precise format of this metadata is determined by policies set by the local security administrator; the metadata and its format are opaque to the mechanisms that store or transport it (i.e., file systems).  The particulars of the PKI and the hash algorithm are set by local policy, which is agreed upon out-of-band and recognized by all participating IMA subsystems.  </p>
+<h3 id="rfc.section.1.1.2">
+<a href="#rfc.section.1.1.2">1.1.2.</a> <a href="#section:F6A13064-1B7B-4848-B172-431EAF1D4819" id="section:F6A13064-1B7B-4848-B172-431EAF1D4819">Creating and Verifying IMA Metadata</a>
+</h3>
+<p id="rfc.section.1.1.2.p.1">In a typical deployment, an authority (such as a software vendor) computes the hash of a file after its content has been finalized.  The hash is then signed and attached to the file.  A web of trust typically links the signer to the users of the file's content (such as customers of the software vendor).  </p>
+<p id="rfc.section.1.1.2.p.2">Directly before file content is to be used, a security module locally re-computes the hash of the file content and stores it in a cache.  This step is known as "measurement".  </p>
+<p id="rfc.section.1.1.2.p.3">The next step is referred to as "appraisal".  The security module then reads the associated IMA metadata and validates its signature.  If the signature is invalid or the locally computed hash does not match the stored hash, the security module applies an appraisal policy.  The file may be flagged in an audit log or access to the file may be denied.  </p>
+<p id="rfc.section.1.1.2.p.4">Underlying file and storage systems play no part in measurement or appraisal.  They act only as a conduit by which file content and IMA metadata move between at-rest storage and the security module on the host where that content is to be used.  Both IMA metadata and file content are opaque to storage subsystems.  </p>
+<h3 id="rfc.section.1.1.3">
+<a href="#rfc.section.1.1.3">1.1.3.</a> <a href="#section:EA9E4277-096E-41C7-A824-89C186AC9E12" id="section:EA9E4277-096E-41C7-A824-89C186AC9E12">Distributing and Protecting Keying Material</a>
+</h3>
+<p id="rfc.section.1.1.3.p.1">A <a href="https://trustedcomputinggroup.org/wp-content/uploads/Trusted-Platform-Module-Summary_04292008.pdf">Trusted Platform Module </a> can seal key material used to sign and appraise file content.  Unprotected keys are not stored in or distributed via file systems.  Distributing and protecting such key material is outside the scope of the extension specified in this document.  </p>
+<h3 id="rfc.section.1.1.4">
+<a href="#rfc.section.1.1.4">1.1.4.</a> <a href="#section:61F4E746-933C-47A0-AEAD-EB165B5F53A4" id="section:61F4E746-933C-47A0-AEAD-EB165B5F53A4">Using IMA to Protect NFS Files</a>
+</h3>
+<p id="rfc.section.1.1.4.p.1">The protocol extension in this document enables the storage and use of IMA metadata so that measurement and appraisal can occur at point-of-use on NFS client and server hosts.  This mechanism is similar to NFSv4 Security Labels (specified in <a href="#RFC7862" class="xref">[RFC7862]</a> et al).  The purpose of the mechanism defined in the current document is to store security-related file metadata that is not interpreted by the file system itself.  </p>
+<h2 id="rfc.section.1.2">
+<a href="#rfc.section.1.2">1.2.</a> <a href="#section:DFCFDF63-1A15-4DC2-958A-9CD6BABF9F65" id="section:DFCFDF63-1A15-4DC2-958A-9CD6BABF9F65">An Illustrative Use Case</a>
+</h2>
+<p id="rfc.section.1.2.p.1">To help the reader grasp how IMA on NFS might be used in practice, this section contains a decription of an IMA use case.  The purpose of using IMA here is to provide a guarantee that a set of users that are executing a commercial software product are indeed using the same binary executable and libraries that were developed and tested by the product's vendor.  </p>
+<p id="rfc.section.1.2.p.2">To publish a software product, a vendor might do the following: </p>
+
+<ol>
+<li>The vendor generates a key pair and publishes the public key.  </li>
+<li>The vendor finalizes a version of its software product.  </li>
+<li>The vendor generates a hash of each file in the product's distribution manifest, and signs each hash with its private key.  </li>
+<li>The vendor publishes the product's files and the signed hashes.  </li>
+</ol>
+
+<p> </p>
+<p id="rfc.section.1.2.p.3">To install and use the vendor's product, a customer might do the following: </p>
+
+<ol>
+<li>The customer installs the files and the signed hashes in a local filesystem.  </li>
+<li>When a user executes one of the files, a local security module reads the file from disk and computes a hash of its content.  This is the measurement step, which happens when each file is loaded into the system's page cache.  </li>
+<li>The security module uses the vendor's public key to verify the signature of the file's stored hash, and confirms that the locally computed hash matches the stored hash.  This is the appraisal step, which happens when each file is about to be executed.  </li>
+<li>If the locally computed hash is verified, the security module allows the operating system to execute the program.  If not, then the program fails to execute and an integrity error is logged.  </li>
+</ol>
+
+<p> </p>
+<p id="rfc.section.1.2.p.4">The purpose of the NFS extension specified in the current document is to enable the signed hashes in the above example to be stored by an NFS server and retrieved by NFS clients.  Each NFS client could then verify that neither the NFS server nor an active network agent had altered file content before it was used on the NFS client.  </p>
+<h1 id="rfc.section.2">
+<a href="#rfc.section.2">2.</a> <a href="#section:5655ED6E-32DC-4233-B606-23AFBE39200E" id="section:5655ED6E-32DC-4233-B606-23AFBE39200E">Requirements Language</a>
+</h1>
+<p id="rfc.section.2.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <a href="#RFC2119" class="xref">[RFC2119]</a> <a href="#RFC8174" class="xref">[RFC8174]</a> when, and only when, they appear in all capitals, as shown here.  </p>
+<h1 id="rfc.section.3">
+<a href="#rfc.section.3">3.</a> <a href="#section:EE671D6C-D026-4935-BDB5-D905E3EB6F66" id="section:EE671D6C-D026-4935-BDB5-D905E3EB6F66">Protocol Extension Considerations</a>
+</h1>
+<p id="rfc.section.3.p.1">This document specifies an OPTIONAL extension to NFS version 4 minor version 2 <a href="#RFC7862" class="xref">[RFC7862]</a>, hereafter referred to as NFS version 4.2.  NFS version 4.2 servers and clients implemented without knowledge of this extension will continue to interoperate with NFS version 4.2 clients and servers that are aware of the extension, whether or not they support it.  </p>
+<p id="rfc.section.3.p.2">Because <a href="#RFC7862" class="xref">[RFC7862]</a> does not define NFS version 4.2 as non-extensible, <a href="#RFC8178" class="xref">[RFC8178]</a> treats it as an extensible minor version.  Therefore this Standards Track RFC extends NFS version 4.2 but does not update <a href="#RFC7862" class="xref">[RFC7862]</a> or <a href="#RFC7863" class="xref">[RFC7863]</a>.  </p>
+<h2 id="rfc.section.3.1">
+<a href="#rfc.section.3.1">3.1.</a> <a href="#section:F6B86801-63FC-4B65-B16E-C62AB12078D0" id="section:F6B86801-63FC-4B65-B16E-C62AB12078D0">XDR Extraction</a>
+</h2>
+<pre>
+&lt;CODE BEGINS&gt;
+
+sed -n -e 's:^ */// ::p' -e 's:^ *///$::p'
+
+&lt;CODE ENDS&gt;
+</pre>
+<p><a href="#section:E7540F27-9406-454D-9FBE-B2EAC79A3920" class="xref">Section 4.1</a> contains a description of an extension to the NFS version 4.2 protocol, expressed in the External Data Representation (XDR) language <a href="#RFC4506" class="xref">[RFC4506]</a>.  This description is provided in a way that makes it simple to extract into ready-to-compile form.  The reader can apply the following sed script to this document to produce a machine-readable XDR description of the extension.  </p>
+<pre>
+&lt;CODE BEGINS&gt;
+
+sed -n -e 's:^ */// ::p' -e 's:^ *///$::p'
+     &lt; ima-extension.txt &gt; ima.x
+
+&lt;CODE ENDS&gt;
+</pre>
+<p id="rfc.section.3.1.p.2">That is, if this document is in a file called "ima-extension.txt" then the reader can do the following to extract an XDR description file: </p>
+<p id="rfc.section.3.1.p.3">Once that extraction is done, these added lines need to be inserted into an appropriate base XDR of the generated XDR from <a href="#RFC7863" class="xref">[RFC7863]</a> together with XDR from any additional extensions to be recognized by the implementation.  This will result in a ready-to-compile XDR file.  </p>
+<h1 id="rfc.section.4">
+<a href="#rfc.section.4">4.</a> <a href="#section:42398ABB-62B5-484C-A02E-D7F0FDA7F4BA" id="section:42398ABB-62B5-484C-A02E-D7F0FDA7F4BA">Managing IMA Metadata on NFS Files</a>
+</h1>
+<h2 id="rfc.section.4.1">
+<a href="#rfc.section.4.1">4.1.</a> <a href="#section:E7540F27-9406-454D-9FBE-B2EAC79A3920" id="section:E7540F27-9406-454D-9FBE-B2EAC79A3920">XDR Definition</a>
+</h2>
+<p id="rfc.section.4.1.p.1">This section defines a new data type to encapsulate and a new OPTIONAL attribute to access and update IMA metadata associated with a particular file.  </p>
+<p id="rfc.section.4.1.p.2">To enable a single IMA metadata payload to be retrieved or updated via a single RPC, and to constrain the transport resources required for the operations defined in this section, the length of IMA metadata MUST NOT exceed 4096 bytes in length.  </p>
+<p id="rfc.section.4.1.p.3">When an NFS version 4.2 server does not recognize, or does recognize but does not support, this new attribute, the server responds in accordance with the requirements specified in Section 4.3 of <a href="#RFC8178" class="xref">[RFC8178]</a>.  </p>
+<pre>
+&lt;CODE BEGINS&gt;
+
+   /// /*
+   ///  * Copyright (c) 2019 IETF Trust and the person identified
+   ///  * as author of the code.  All rights reserved.
+   ///  *
+   ///  * The author of the code is: C. Lever
+   ///  */
+   ///
+   /// %/*
+   /// % * New For Integrity Measurement support
+   /// % */
+   /// opaque                           ima_data4&lt;4096&gt;;
+   ///
+   /// const FATTR4_IMA = XXX;          /* to be assigned */
+   ///
+   /// %/*
+   /// % *New value added to enum nfsstat4
+   /// % */
+   /// const NFS4ERR_INTEGRITY = YYYYY; /* to be assigned */
+
+&lt;CODE ENDS&gt;
+</pre>
+<h3 id="rfc.section.4.1.1">
+<a href="#rfc.section.4.1.1">4.1.1.</a> <a href="#section:4AE2D6D4-A105-4E17-A93C-149E14A23F10" id="section:4AE2D6D4-A105-4E17-A93C-149E14A23F10">NFS4ERR_INTEGRITY (Error Code YYYYY)</a>
+</h3>
+<p id="rfc.section.4.1.1.p.1">The server rejected this request because a data or metadata integrity check failed during its execution.  </p>
+<h2 id="rfc.section.4.2">
+<a href="#rfc.section.4.2">4.2.</a> <a href="#section:49517532-7084-4F57-A9E0-E6D9E539BD66" id="section:49517532-7084-4F57-A9E0-E6D9E539BD66">Detecting support for IMA Metadata</a>
+</h2>
+<p id="rfc.section.4.2.p.1">An NFS version 4.2 client discovers support for IMA metadata on an NFS version 4.2 server by sending an NFS GETATTR operation that specifies the FATTR4_SUPPORTED_ATTRS attribute and the FATTR4_IMA attribute.  When a server supports IMA metadata, it sets the FATTR4_IMA attribute bit in the NFS GETATTR bitmask returned in the reply.  Otherwise that bit is clear.  </p>
+<p id="rfc.section.4.2.p.2">An NFS version 4.2 server MUST NOT return NFS4ERR_INTEGRITY to a client unless that client has queried the server for IMA metadata support using the above mechanism.  The server identifies clients using their client_id4 for this purpose.  </p>
+<h3 id="rfc.section.4.2.1">
+<a href="#rfc.section.4.2.1">4.2.1.</a> <a href="#section:845E57CD-BE87-4B6F-BD81-515474D9AAC8" id="section:845E57CD-BE87-4B6F-BD81-515474D9AAC8">Reporting Server-Side IMA Appraisal Failures</a>
+</h3>
+<p id="rfc.section.4.2.1.p.1">An NFS server that has rigorous integrity checking must somehow report integrity-related failures to clients.  Until now, a server implementer chose amongst status codes that were available in the base NFS version 4.2 protocol, typically NFS4ERR_IO or NFS4ERR_ACCESS, even though these code points have generic meanings that do not necessarily imply an integrity-related failure.  </p>
+<p id="rfc.section.4.2.1.p.2">Once the above FATTR4_SUPPORTED_ATTRS handshake is done, the server has determined that a client can properly recognize the NFS4ERR_INTEGRITY status code.  In instances where an NFS request fails due to an integrity-related issue, and the server has determined that the client recognizes the NFS4ERR_INTEGRITY status code, the server MAY return NFS4ERR_INTEGRITY for the following operations: ACCESS, COMMIT, CREATE, GETATTR, GETDEVICELIST, LINK, LOOKUP, LOOKUPP, NVERIFY, OPEN, OPENATTR, READ, READDIR, READLINK, REMOVE, RENAME, SETATTR, VERIFY, WRITE.  The server MUST NOT return NFS4ERR_INTEGRITY for any other operation.  </p>
+<p id="rfc.section.4.2.1.p.3">The NFS4ERR_INTEGRITY status code is useful to inform the client (or the end user, depending on the client implementation) that access to the file's content was not blocked because of a permissions setting but rather because an integrity check failed.  This distinction can guide the user or client towards a recovery action that is appropriate.  </p>
+<h2 id="rfc.section.4.3">
+<a href="#rfc.section.4.3">4.3.</a> <a href="#section:7167B240-32ED-47DB-903E-874A3A43FF9B" id="section:7167B240-32ED-47DB-903E-874A3A43FF9B">Storing IMA Metadata</a>
+</h2>
+<p id="rfc.section.4.3.p.1">An NFS version 4.2 client stores IMA metadata by sending an NFS SETATTR operation that specifies the FATTR4_IMA attribute and targets the file system object associated with the metadata to be stored.  This attribute completely replaces any previous FATTR4_IMA attribute associated with that object.  Modifying an object in any other way MUST NOT alter or remove FATTR4_IMA attributes.  </p>
+<p id="rfc.section.4.3.p.2">To remove IMA metadata from an object, the client sends a FATTR4_IMA attribute whose length is zero.  </p>
+<p id="rfc.section.4.3.p.3">When an NFS SETATTR is presented to an NFS version 4.2 server with a credential that is not authorized to replace a FATTR4_IMA attribute, the server MUST respond with NFS4ERR_ACCESS.  </p>
+<p id="rfc.section.4.3.p.4">When an NFS SETATTR is presented to an NFS version 4.2 server with an ima_data4 field whose length is larger than 4096 bytes, the server MUST respond with NFS4ERR_INVAL.  </p>
+<p id="rfc.section.4.3.p.5">When an NFS SETATTR is presented to an NFS version 4.2 server and the target object resides in a file system which supports FATTR4_IMA but the object itself does not support the FATTR4_IMA attribute, the server MUST respond with NFS4ERR_WRONGTYPE.  For example, if the server's file system supports associating IMA metadata with regular files but not with sockets or FIFOs, then the result of an attempt to associate IMA metadata with a FIFO will be NFS4ERR_WRONGTYPE.  </p>
+<p id="rfc.section.4.3.p.6">When an NFS SETATTR is presented to an NFS version 4.2 server but the target object resides in a file system which does not support the FATTR4_IMA attribute, the server MUST respond with NFS4ERR_ATTRNOTSUPP.  </p>
+<p id="rfc.section.4.3.p.7">When a client presents an NFS SETATTR that modifies FATTR4_IMA along with other attributes and the server responds with an error, the client can retry setting each attribute separately to sort out which attribute is causing the server to reject the NFS SETATTR operation.  </p>
+<p id="rfc.section.4.3.p.8">A detailed description of the NFS SETATTR operation can be found in Section 18.30 of <a href="#RFC5661" class="xref">[RFC5661]</a>.  </p>
+<h3 id="rfc.section.4.3.1">
+<a href="#rfc.section.4.3.1">4.3.1.</a> <a href="#section:D7663BDC-A0C8-437D-88A5-1D79A3E7F9C2" id="section:D7663BDC-A0C8-437D-88A5-1D79A3E7F9C2">Sending IMA Metadata When Creating a New Object</a>
+</h3>
+<p id="rfc.section.4.3.1.p.1">An alternate way to set an attribute is to provide the attribute during an NFS OPEN(CREATE) operation.  Upon creation, an object has no content to protect.  If a client presents an FATTR4_IMA attribute to an NFS version 4.2 server during NFS OPEN(CREATE), the server MUST respond with NFS4ERR_INVAL.  </p>
+<h3 id="rfc.section.4.3.2">
+<a href="#rfc.section.4.3.2">4.3.2.</a> <a href="#C17FEFF5-F9F8-46C4-AC3D-1B04DF704752" id="C17FEFF5-F9F8-46C4-AC3D-1B04DF704752">Authorizing Updates to IMA Metadata</a>
+</h3>
+<p id="rfc.section.4.3.2.p.1">An NFS server permits a user to replace a file's IMA metadata whenever that user is permitted to modify that file's byte content.  This is consistent with similar mechanisms already used throughout the NFS version 4 protocol; for instance, setting an ACL.  If an NFS server determines that a user requesting a SETATTR with the FATTR4_IMA attribute is not authorized to update the IMA metadata, the SETATTR operation MUST return NFS4ERR_ACCESS.  </p>
+<p id="rfc.section.4.3.2.p.2">If an NFS server implementation does not support modification of IMA metadata via NFS, the server MUST return NFS4ERR_INVAL to a SETATTR request with the FATTR4_IMA attribute, as required by Section 5.5 of <a href="#RFC5661" class="xref">[RFC5661]</a>.  </p>
+<h2 id="rfc.section.4.4">
+<a href="#rfc.section.4.4">4.4.</a> <a href="#section:3F3277B1-50F2-4317-9707-1A27FE3B0112" id="section:3F3277B1-50F2-4317-9707-1A27FE3B0112">Retrieving IMA Metadata</a>
+</h2>
+<p id="rfc.section.4.4.p.1">An NFS version 4.2 client retrieves IMA metadata by retrieving the FATTR4_IMA attribute via an NFS GETATTR operation, specifying the file handle of the object associated with the metadata to be retrieved.  </p>
+<p id="rfc.section.4.4.p.2">The IMA subsystem typically manages its own cache of this metadata to maintain reasonable performance.  The NFS client implementation MUST always pass retrieval requests for this metadata to the server.  This metadata MUST NOT be cached by the NFS client.  </p>
+<p id="rfc.section.4.4.p.3">When an NFS GETATTR is presented to an NFS version 4.2 server and the target object resides in a file system which supports the FATTR4_IMA attribute but the object does not support the FATTR4_IMA attribute, the server MUST respond with NFS4ERR_WRONGTYPE.  For example, if the server's file system supports associating IMA metadata with regular files but not named attributes, then the result of an attempt to retrieve IMA metadata on a named attribute will be NFS4ERR_WRONGTYPE.  </p>
+<p id="rfc.section.4.4.p.4">When an NFS GETATTR is presented to an NFS version 4.2 server but the target object resides in a file system which does not support FATTR4_IMA, this does not result in an error and the FATTR4_IMA attribute bit is cleared in the server's response.  </p>
+<p id="rfc.section.4.4.p.5">Otherwise, if the target object supports FATTR4_IMA and there is no IMA metadata is available for the target object, the server returns a FATTR4_IMA attribute whose length is zero.  </p>
+<p id="rfc.section.4.4.p.6">When a client presents an NFS GETATTR that retrieves FATTR4_IMA along with other attributes and the server responds with an error, the client can retry by retrieving each attribute separately to sort out which attribute is causing the server to reject the NFS GETATTR operation.  </p>
+<p id="rfc.section.4.4.p.7">A detailed description of the NFS GETATTR operation can be found in Section 18.7 of <a href="#RFC5661" class="xref">[RFC5661]</a>.  </p>
+<h2 id="rfc.section.4.5">
+<a href="#rfc.section.4.5">4.5.</a> <a href="#section:14C3407B-4FE2-4300-82DF-D6ECC55BAABB" id="section:14C3407B-4FE2-4300-82DF-D6ECC55BAABB">Using NFS Attribute Fencing (VERIFY/NVERIFY)</a>
+</h2>
+<p id="rfc.section.4.5.p.1">The NFS VERIFY and NVERIFY operations, described in Sections 18.31 and 18.15 of <a href="#RFC5661" class="xref">[RFC5661]</a> respectively, permit a client to add a fence in an NFS COMPOUND where, if a provided FATTR4 attribute does or does not match, the server can force processing of that COMPOUND to stop.  The FATTR4_IMA attribute is a valid choice for these operations.  </p>
+<p id="rfc.section.4.5.p.2">The server MUST use a simple byte comparison to evaluate whether the client-provided FATTR4_IMA matches the FATTR4_IMA attribute associated with the target object.  If the server has a local IMA implementation, it MAY prevent the use of the local FATTR4_IMA attribute value for the purpose of this comparison (via EVM protection).  If the client has indicated support for IMA metadata, the server MUST respond with NFS4ERR_INTEGRITY.  Otherwise it MUST respond with NFS4ERR_ACCESS.  </p>
+<h1 id="rfc.section.5">
+<a href="#rfc.section.5">5.</a> <a href="#section:4EFFE51F-F07A-490A-9E15-8167D21D3D9D" id="section:4EFFE51F-F07A-490A-9E15-8167D21D3D9D">Deployment Examples</a>
+</h1>
+<h2 id="rfc.section.5.1">
+<a href="#rfc.section.5.1">5.1.</a> <a href="#section:54604E8A-1B3C-4571-B3EC-403567C43AF6" id="section:54604E8A-1B3C-4571-B3EC-403567C43AF6">Terminology</a>
+</h2>
+<p id="rfc.section.5.1.p.1">Because the protocol extension described in this document is OPTIONAL, clients and servers that support it will necessarily interact with clients and servers that do not support it.  To aid the discussion in this section, we define the following terms: </p>
+
+<dl>
+<dt>Appraiser:</dt>
+<dd style="margin-left: 8">A security module separate from the storage system that appraises file content based on a policy and IMA measurement results.  </dd>
+<dt>Participating Client:</dt>
+<dd style="margin-left: 8">An NFS version 4.2 client that employs an appraiser, supports the OPTIONAL extension described in this document, and indicates this support to NFS servers using the handshake described in <a href="#section:49517532-7084-4F57-A9E0-E6D9E539BD66" class="xref">Section 4.2</a>.  </dd>
+<dt>Legacy Client:</dt>
+<dd style="margin-left: 8">Any NFS client that does not support the OPTIONAL extension described in this document.  </dd>
+<dt>Participating Server:</dt>
+<dd style="margin-left: 8">An NFS version 4.2 server that supports the OPTIONAL extension described in this document, indicates this support to clients using the handshake described in <a href="#section:49517532-7084-4F57-A9E0-E6D9E539BD66" class="xref">Section 4.2</a>, and its shared file systems can store IMA metadata.  A participating server is not required to implement an appraiser.  </dd>
+<dt>Legacy Server:</dt>
+<dd style="margin-left: 8">Any NFS server that does not support the OPTIONAL extension described in this document.  </dd>
+</dl>
+
+<p> </p>
+<p id="rfc.section.5.1.p.2">In addition, there are intermediate modes of operation on participating peers: </p>
+
+<dl>
+<dt>Full-function Client:</dt>
+<dd style="margin-left: 8">A participating client that can modify IMA metadata via NFS.  </dd>
+<dt>Fetch-only Client:</dt>
+<dd style="margin-left: 8">A participating client that does not support modifying IMA metadata on a participating server.  </dd>
+<dt>Full-function Server:</dt>
+<dd style="margin-left: 8">A participating server that has a local user execution environment and supports updating IMA metadata that resides on shared local file systems.  </dd>
+<dt>Store-only Server:</dt>
+<dd style="margin-left: 8">A participating server where there is only remote access to file content and IMA metadata.  </dd>
+</dl>
+
+<p> </p>
+<p id="rfc.section.5.1.p.3">Lastly, we provide the following possible simple appraisal policies that might be applied by an appraiser: </p>
+
+<dl>
+<dt>Strict:</dt>
+<dd style="margin-left: 8">Access is prevented to a file's content if the file has no IMA metadata or if the extant IMA metadata fails to verify the file content.  Otherwise access to the file's content is not prevented.  </dd>
+<dt>Audit:</dt>
+<dd style="margin-left: 8">Access to a file's content is never prevented.  Warnings are reported when a file has no IMA metadata or when extant IMA metadata fails to verify the file's content.  </dd>
+<dt>Disabled:</dt>
+<dd style="margin-left: 8">IMA metadata is ignored and access to file content is never prevented.  </dd>
+</dl>
+
+<p> </p>
+<h2 id="rfc.section.5.2">
+<a href="#rfc.section.5.2">5.2.</a> <a href="#section:548BF993-DE7D-4752-80C5-6628073606BE" id="section:548BF993-DE7D-4752-80C5-6628073606BE">Instantiating IMA Metadata</a>
+</h2>
+<p id="rfc.section.5.2.p.1">Once a file is written and closed, a specialized tool generates and signs the IMA metadata and then writes it to the file system.  The tool can be used on a full-function client to sign files on a participating server.  Or, the tool can be used on a full-function server to sign local files.  The IMA metadata is then visible to participating clients and local users on the server (if there are any).  Or, an enhanced version of cpio or rsync might copy the metadata into place as part of an installation procedure.  </p>
+<p id="rfc.section.5.2.p.2">Typically, once IMA metadata is associated with a file, the file's content is essentially immutable, even if the file's permissions settings permit writing to it.  This is because changing the content without updating the associated IMA metadata will make the file's content inaccessible, depending on the appraisal policy in effect.  </p>
+<p id="rfc.section.5.2.p.3">Updating file content requires access to a signing key in order to generate fresh IMA metadata to prevent subsequent IMA appraisal failures.  Typically a key like this will be well-protected, and thus not available on NFS clients.  </p>
+<h2 id="rfc.section.5.3">
+<a href="#rfc.section.5.3">5.3.</a> <a href="#section:2004C060-4504-44A6-A702-CDCA40C006C6" id="section:2004C060-4504-44A6-A702-CDCA40C006C6">Interaction With Legacy Implementations</a>
+</h2>
+<p id="rfc.section.5.3.p.1">Given the example policies and definitions we provided earlier, the following statements are true: </p>
+
+<ul>
+<li>A participating client that uses the Disabled policy is equivalent to a legacy client, except that a participating server is allowed to respond with NFS4ERR_INTEGRITY to a participating client.  </li>
+<li>A legacy client never prevents access to file content on a participating server, but a participating server that has a local appraiser may prevent access of a corrupted file to a legacy client.  </li>
+<li>A participating client using the Strict policy never allows access to files stored on a legacy server.  </li>
+</ul>
+
+<p> </p>
+<p id="rfc.section.5.3.p.2">An appraiser on a participating NFS version 4.2 peer needs to be prepared to deal gracefully with IMA metadata it does not recognize or cannot parse.  Its policy may treat this case as an appraisal failure.  </p>
+<p id="rfc.section.5.3.p.3">It is not required for an NFS version 4.2 server to implement an appraiser.  However, some servers, such as the Linux NFS server, do just that, applying local IMA policy to both local and remote file accesses.  </p>
+<p id="rfc.section.5.3.p.4">If an appraisal failure occurs during a remote access, a participating server responds to a legacy client with NFS4ERR_ACCESS.  The server's local policy decides exactly what a participating client sees: Possibilities include an NFS4ERR_INTEGRITY response (and access to the file is denied), or access to the file content and IMA metadata may be permitted so that the client's own IMA policies can be applied.  </p>
+<h1 id="rfc.section.6">
+<a href="#rfc.section.6">6.</a> <a href="#section:887D5902-4FF5-44F3-AA9C-FE0E6485A53E" id="section:887D5902-4FF5-44F3-AA9C-FE0E6485A53E">Implementation Status</a>
+</h1>
+<p id="rfc.section.6.p.1">This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in <a href="#RFC7942" class="xref">[RFC7942]</a>.  The description of implementations in this section is intended to assist the IETF in its decision processes in progressing drafts to RFCs.  </p>
+<p id="rfc.section.6.p.2">Please note that the listing of any individual implementation here does not imply endorsement by the IETF.  Furthermore, no effort has been spent to verify the information presented here that was supplied by IETF contributors.  This is not intended as, and must not be construed to be, a catalog of available implementations or their features.  Readers are advised to note that other implementations may exist.  </p>
+<h2 id="rfc.section.6.1">
+<a href="#rfc.section.6.1">6.1.</a> <a href="#section:BF03B3A2-4483-4404-9E7A-F60FCD850F31" id="section:BF03B3A2-4483-4404-9E7A-F60FCD850F31">Linux NFS server and client</a>
+</h2>
+<p></p>
+
+<dl>
+<dt>Organization:</dt>
+<dd style="margin-left: 11">The Linux Foundation </dd>
+<dt>URL:</dt>
+<dd style="margin-left: 11">https://www.kernel.org </dd>
+<dt>Maturity:</dt>
+<dd style="margin-left: 11">Prototype software based on early versions of this document.  </dd>
+<dt>Coverage:</dt>
+<dd style="margin-left: 11">The bulk of this specification is implemented.  </dd>
+<dt>Licensing:</dt>
+<dd style="margin-left: 11">GPLv2 </dd>
+<dt>Implementation experience:</dt>
+<dd style="margin-left: 11">No comments from implementors.  </dd>
+</dl>
+
+<p> </p>
+<h1 id="rfc.section.7">
+<a href="#rfc.section.7">7.</a> <a href="#section:83D5C960-0148-42FA-93E4-3DE7F96EFD34" id="section:83D5C960-0148-42FA-93E4-3DE7F96EFD34">Security Considerations</a>
+</h1>
+<p id="rfc.section.7.p.1">The design of the NFS extension described in this document assumes that all IMA metadata is cryptographically signed to prevent unwanted alteration at rest or in transit.  </p>
+<p id="rfc.section.7.p.2">When IMA metadata for a file exists and the end host has an active appraiser, the content of a file is protected from creation to use.  Receivers can reliably detect unintentional or malicious alteration of file content by verifying its content using the file's IMA metadata.  Additional protection of file content while at rest or in transit on an untrusted network is unnecessary.  </p>
+<p id="rfc.section.7.p.3">Likewise, receivers can also reliably detect unintentional or malicious alteration of IMA metadata that is cryptographically signed, simply by verifying its signature.  Additional protection of signed metadata while at rest or in transit on an untrusted network is unnecessary.  </p>
+<p id="rfc.section.7.p.4">Like other mechanisms that protect data integrity during transit, a malicious agent or a network malfunction can create a denial-of-service condition by repeatedly triggering integrity verification failures on NFS version 4.2 clients.  </p>
+<p id="rfc.section.7.p.5">To prevent a malicious denial-of-service attempt by altering IMA metadata at rest, an NFS version 4.2 server can enforce a suitable level of privilege before authorizing a local or remote agent to alter this information.  See <a href="#C17FEFF5-F9F8-46C4-AC3D-1B04DF704752" class="xref">Section 4.3.2</a> for more detail.  </p>
+<h1 id="rfc.section.8">
+<a href="#rfc.section.8">8.</a> <a href="#section:E0578AF8-A3AB-41E0-9626-654F2593B8C4" id="section:E0578AF8-A3AB-41E0-9626-654F2593B8C4">IANA Considerations</a>
+</h1>
+<p id="rfc.section.8.p.1">This document has no IANA actions.  </p>
+<h1 id="rfc.references">
+<a href="#rfc.references">9.</a> References</h1>
+<h2 id="rfc.references.1">
+<a href="#rfc.references.1">9.1.</a> Normative References</h2>
+<table><tbody>
+<tr>
+<td class="reference"><b id="RFC2119">[RFC2119]</b></td>
+<td class="top">
+<a>Bradner, S.</a>, "<a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC4506">[RFC4506]</b></td>
+<td class="top">
+<a>Eisler, M.</a>, "<a href="https://tools.ietf.org/html/rfc4506">XDR: External Data Representation Standard</a>", STD 67, RFC 4506, DOI 10.17487/RFC4506, May 2006.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC5661">[RFC5661]</b></td>
+<td class="top">
+<a>Shepler, S.</a>, <a>Eisler, M.</a> and <a>D. Noveck</a>, "<a href="https://tools.ietf.org/html/rfc5661">Network File System (NFS) Version 4 Minor Version 1 Protocol</a>", RFC 5661, DOI 10.17487/RFC5661, January 2010.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7862">[RFC7862]</b></td>
+<td class="top">
+<a>Haynes, T.</a>, "<a href="https://tools.ietf.org/html/rfc7862">Network File System (NFS) Version 4 Minor Version 2 Protocol</a>", RFC 7862, DOI 10.17487/RFC7862, November 2016.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7863">[RFC7863]</b></td>
+<td class="top">
+<a>Haynes, T.</a>, "<a href="https://tools.ietf.org/html/rfc7863">Network File System (NFS) Version 4 Minor Version 2 External Data Representation Standard (XDR) Description</a>", RFC 7863, DOI 10.17487/RFC7863, November 2016.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7942">[RFC7942]</b></td>
+<td class="top">
+<a>Sheffer, Y.</a> and <a>A. Farrel</a>, "<a href="https://tools.ietf.org/html/rfc7942">Improving Awareness of Running Code: The Implementation Status Section</a>", BCP 205, RFC 7942, DOI 10.17487/RFC7942, July 2016.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC8174">[RFC8174]</b></td>
+<td class="top">
+<a>Leiba, B.</a>, "<a href="https://tools.ietf.org/html/rfc8174">Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</a>", BCP 14, RFC 8174, DOI 10.17487/RFC8174, May 2017.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC8178">[RFC8178]</b></td>
+<td class="top">
+<a>Noveck, D.</a>, "<a href="https://tools.ietf.org/html/rfc8178">Rules for NFSv4 Extensions and Minor Versions</a>", RFC 8178, DOI 10.17487/RFC8178, July 2017.</td>
+</tr>
+</tbody></table>
+<h2 id="rfc.references.2">
+<a href="#rfc.references.2">9.2.</a> Informative References</h2>
+<table><tbody>
+<tr>
+<td class="reference"><b id="RFC2104">[RFC2104]</b></td>
+<td class="top">
+<a>Krawczyk, H.</a>, <a>Bellare, M.</a> and <a>R. Canetti</a>, "<a href="https://tools.ietf.org/html/rfc2104">HMAC: Keyed-Hashing for Message Authentication</a>", RFC 2104, DOI 10.17487/RFC2104, February 1997.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC4158">[RFC4158]</b></td>
+<td class="top">
+<a>Cooper, M.</a>, <a>Dzambasow, Y.</a>, <a>Hesse, P.</a>, <a>Joseph, S.</a> and <a>R. Nicholas</a>, "<a href="https://tools.ietf.org/html/rfc4158">Internet X.509 Public Key Infrastructure: Certification Path Building</a>", RFC 4158, DOI 10.17487/RFC4158, September 2005.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC5662">[RFC5662]</b></td>
+<td class="top">
+<a>Shepler, S.</a>, <a>Eisler, M.</a> and <a>D. Noveck</a>, "<a href="https://tools.ietf.org/html/rfc5662">Network File System (NFS) Version 4 Minor Version 1 External Data Representation Standard (XDR) Description</a>", RFC 5662, DOI 10.17487/RFC5662, January 2010.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7861">[RFC7861]</b></td>
+<td class="top">
+<a>Adamson, A.</a> and <a>N. Williams</a>, "<a href="https://tools.ietf.org/html/rfc7861">Remote Procedure Call (RPC) Security Version 3</a>", RFC 7861, DOI 10.17487/RFC7861, November 2016.</td>
+</tr>
+<tr>
+<td class="reference"><b id="SAILER">[SAILER]</b></td>
+<td class="top">
+<a>Sailer, R.</a>, <a>Zhang, X.</a>, <a>Jaeger, T.</a> and <a>L. van Doorn</a>, "<a>Design and Implementation of a TCG-based Integrity Measurement Architecture</a>", Proceedings of the 13th USENIX Security Symposium, August 2004.</td>
+</tr>
+</tbody></table>
+<h1 id="rfc.acknowledgments"><a href="#rfc.acknowledgments">Acknowledgments</a></h1>
+<p id="rfc.section.A.p.1">The author wishes to thank Mimi Zohar and James Morris for their early review of the concepts in this document, Wim Coekaerts for his encouragement of this work, and Dave Noveck for his work on NFS version 4 extensibility.  </p>
+<p id="rfc.section.A.p.2">The author wishes to acknowledge review comments from Dave Noveck, Craig Everhart, and Bruce Fields which helped to make this a better document.  </p>
+<p id="rfc.section.A.p.3">The XDR extraction conventions were first described by the authors of the NFS version 4.1 XDR specification <a href="#RFC5662" class="xref">[RFC5662]</a>.  Herbert van den Bergh suggested the replacement sed script used in this document.  </p>
+<p id="rfc.section.A.p.4">Special thanks go to Transport Area Director Magnus Westerlund, NFSV4 Working Group Chairs Spencer Shepler and Brian Pawlowski, and NFSV4 Working Group Secretary Thomas Haynes for their support.  </p>
+<h1 id="rfc.authors"><a href="#rfc.authors">Author's Address</a></h1>
+<div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Charles Lever</span> 
+	  <span class="n hidden">
+		<span class="family-name">Lever</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Oracle Corporation</span>
+	<span class="adr">
+	  
+	  <span class="vcardline">
+		<span class="locality"></span> 
+		<span class="region"></span>
+		<span class="code"></span>
+	  </span>
+	  <span class="country-name vcardline">United States of America</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:chuck.lever@oracle.com">chuck.lever@oracle.com</a></span>
+
+  </address>
+</div>
+
+</body>
+</html>
+
