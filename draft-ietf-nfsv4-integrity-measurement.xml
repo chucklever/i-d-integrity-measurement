@@ -480,11 +480,12 @@ in Section 4.3 of
 </artwork>
 </figure>
 
-<!-- RFC Editor:
+<t>
+RFC Editor:
 In this document, please replace XXX with the FATTR4 number
 assigned by the NFSV4 WG, and replace YYYYY with the NFS4ERR
 code point assigned by the NFSV4 WG.
--->
+</t>
 
 <section
  title="NFS4ERR_INTEGRITY (Error Code YYYYY)"
