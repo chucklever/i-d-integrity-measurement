@@ -4,8 +4,8 @@
 
 Network File System Version 4                                   C. Lever
 Internet-Draft                                                    Oracle
-Intended status: Standards Track                         October 1, 2019
-Expires: April 3, 2020
+Intended status: Standards Track                           April 3, 2020
+Expires: October 5, 2020
 
 
         Integrity Measurement for Network File System version 4
@@ -35,11 +35,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 3, 2020.
+   This Internet-Draft will expire on October 5, 2020.
 
 Copyright Notice
 
-   Copyright (c) 2019 IETF Trust and the persons identified as the
+   Copyright (c) 2020 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Lever                     Expires April 3, 2020                 [Page 1]
+Lever                    Expires October 5, 2020                [Page 1]
 
-Internet-Draft              IMA for NFS Files               October 2019
+Internet-Draft              IMA for NFS Files                 April 2020
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Lever                     Expires April 3, 2020                 [Page 2]
+Lever                    Expires October 5, 2020                [Page 2]
 
-Internet-Draft              IMA for NFS Files               October 2019
+Internet-Draft              IMA for NFS Files                 April 2020
 
 
    or software.  Software vendors want a guarantee that customer-
@@ -165,9 +165,9 @@ Internet-Draft              IMA for NFS Files               October 2019
 
 
 
-Lever                     Expires April 3, 2020                 [Page 3]
+Lever                    Expires October 5, 2020                [Page 3]
 
-Internet-Draft              IMA for NFS Files               October 2019
+Internet-Draft              IMA for NFS Files                 April 2020
 
 
 1.1.1.  IMA Metadata
@@ -221,9 +221,9 @@ Internet-Draft              IMA for NFS Files               October 2019
 
 
 
-Lever                     Expires April 3, 2020                 [Page 4]
+Lever                    Expires October 5, 2020                [Page 4]
 
-Internet-Draft              IMA for NFS Files               October 2019
+Internet-Draft              IMA for NFS Files                 April 2020
 
 
    The next step is referred to as "appraisal".  The security module
@@ -277,9 +277,9 @@ Internet-Draft              IMA for NFS Files               October 2019
 
 
 
-Lever                     Expires April 3, 2020                 [Page 5]
+Lever                    Expires October 5, 2020                [Page 5]
 
-Internet-Draft              IMA for NFS Files               October 2019
+Internet-Draft              IMA for NFS Files                 April 2020
 
 
    4.  The vendor publishes the product's files and the signed hashes.
@@ -333,9 +333,9 @@ Internet-Draft              IMA for NFS Files               October 2019
 
 
 
-Lever                     Expires April 3, 2020                 [Page 6]
+Lever                    Expires October 5, 2020                [Page 6]
 
-Internet-Draft              IMA for NFS Files               October 2019
+Internet-Draft              IMA for NFS Files                 April 2020
 
 
    Standards Track RFC extends NFS version 4.2 but does not update
@@ -389,9 +389,9 @@ Internet-Draft              IMA for NFS Files               October 2019
 
 
 
-Lever                     Expires April 3, 2020                 [Page 7]
+Lever                    Expires October 5, 2020                [Page 7]
 
-Internet-Draft              IMA for NFS Files               October 2019
+Internet-Draft              IMA for NFS Files                 April 2020
 
 
    When an NFS version 4.2 server does not recognize, or does recognize
@@ -422,6 +422,10 @@ Internet-Draft              IMA for NFS Files               October 2019
 
    <CODE ENDS>
 
+   RFC Editor: In this document, please replace XXX with the FATTR4
+   number assigned by the NFSV4 WG, and replace YYYYY with the NFS4ERR
+   code point assigned by the NFSV4 WG.
+
 4.1.1.  NFS4ERR_INTEGRITY (Error Code YYYYY)
 
    The server rejected this request because a data or metadata integrity
@@ -438,17 +442,16 @@ Internet-Draft              IMA for NFS Files               October 2019
 
    An NFS version 4.2 server MUST NOT return NFS4ERR_INTEGRITY to a
    client unless that client has queried the server for IMA metadata
+
+
+
+Lever                    Expires October 5, 2020                [Page 8]
+
+Internet-Draft              IMA for NFS Files                 April 2020
+
+
    support using the above mechanism.  The server identifies clients
    using their client_id4 for this purpose.
-
-
-
-
-
-Lever                     Expires April 3, 2020                 [Page 8]
-
-Internet-Draft              IMA for NFS Files               October 2019
-
 
 4.2.1.  Reporting Server-Side IMA Appraisal Failures
 
@@ -493,18 +496,19 @@ Internet-Draft              IMA for NFS Files               October 2019
    credential that is not authorized to replace a FATTR4_IMA attribute,
    the server MUST respond with NFS4ERR_ACCESS.
 
+
+
+
+
+
+Lever                    Expires October 5, 2020                [Page 9]
+
+Internet-Draft              IMA for NFS Files                 April 2020
+
+
    When an NFS SETATTR is presented to an NFS version 4.2 server with an
    ima_data4 field whose length is larger than 4096 bytes, the server
    MUST respond with NFS4ERR_INVAL.
-
-
-
-
-
-Lever                     Expires April 3, 2020                 [Page 9]
-
-Internet-Draft              IMA for NFS Files               October 2019
-
 
    When an NFS SETATTR is presented to an NFS version 4.2 server and the
    target object resides in a file system which supports FATTR4_IMA but
@@ -553,13 +557,9 @@ Internet-Draft              IMA for NFS Files               October 2019
 
 
 
-
-
-
-
-Lever                     Expires April 3, 2020                [Page 10]
+Lever                    Expires October 5, 2020               [Page 10]
 
-Internet-Draft              IMA for NFS Files               October 2019
+Internet-Draft              IMA for NFS Files                 April 2020
 
 
 4.4.  Retrieving IMA Metadata
@@ -613,9 +613,9 @@ Internet-Draft              IMA for NFS Files               October 2019
 
 
 
-Lever                     Expires April 3, 2020                [Page 11]
+Lever                    Expires October 5, 2020               [Page 11]
 
-Internet-Draft              IMA for NFS Files               October 2019
+Internet-Draft              IMA for NFS Files                 April 2020
 
 
    associated with the target object.  If the server has a local IMA
@@ -669,9 +669,9 @@ Internet-Draft              IMA for NFS Files               October 2019
 
 
 
-Lever                     Expires April 3, 2020                [Page 12]
+Lever                    Expires October 5, 2020               [Page 12]
 
-Internet-Draft              IMA for NFS Files               October 2019
+Internet-Draft              IMA for NFS Files                 April 2020
 
 
    Full-function Server:  A participating server that has a local user
@@ -725,9 +725,9 @@ Internet-Draft              IMA for NFS Files               October 2019
 
 
 
-Lever                     Expires April 3, 2020                [Page 13]
+Lever                    Expires October 5, 2020               [Page 13]
 
-Internet-Draft              IMA for NFS Files               October 2019
+Internet-Draft              IMA for NFS Files                 April 2020
 
 
 5.3.  Interaction With Legacy Implementations
@@ -767,6 +767,9 @@ Internet-Draft              IMA for NFS Files               October 2019
 
 6.  Implementation Status
 
+   RFC Editor: Please remove this section and the reference to RFC 7942
+   before this document is published.
+
    This section records the status of known implementations of the
    protocol defined by this specification at the time of posting of this
    Internet-Draft, and is based on a proposal described in [RFC7942].
@@ -774,18 +777,19 @@ Internet-Draft              IMA for NFS Files               October 2019
    assist the IETF in its decision processes in progressing drafts to
    RFCs.
 
+
+
+
+
+Lever                    Expires October 5, 2020               [Page 14]
+
+Internet-Draft              IMA for NFS Files                 April 2020
+
+
    Please note that the listing of any individual implementation here
    does not imply endorsement by the IETF.  Furthermore, no effort has
    been spent to verify the information presented here that was supplied
    by IETF contributors.  This is not intended as, and must not be
-
-
-
-Lever                     Expires April 3, 2020                [Page 14]
-
-Internet-Draft              IMA for NFS Files               October 2019
-
-
    construed to be, a catalog of available implementations or their
    features.  Readers are advised to note that other implementations may
    exist.
@@ -808,8 +812,8 @@ Internet-Draft              IMA for NFS Files               October 2019
 7.  Security Considerations
 
    The design of the NFS extension described in this document assumes
-   that all IMA metadata is cryptographically signed to prevent unwanted
-   alteration at rest or in transit.
+   that IMA metadata in transit and at rest is cryptographically signed
+   to prevent unwanted alteration.
 
    When IMA metadata for a file exists and the end host has an active
    appraiser, the content of a file is protected from creation to use.
@@ -829,18 +833,19 @@ Internet-Draft              IMA for NFS Files               October 2019
    service condition by repeatedly triggering integrity verification
    failures on NFS version 4.2 clients.
 
+
+
+
+
+Lever                    Expires October 5, 2020               [Page 15]
+
+Internet-Draft              IMA for NFS Files                 April 2020
+
+
    To prevent a malicious denial-of-service attempt by altering IMA
    metadata at rest, an NFS version 4.2 server can enforce a suitable
    level of privilege before authorizing a local or remote agent to
    alter this information.  See Section 4.3.2 for more detail.
-
-
-
-
-Lever                     Expires April 3, 2020                [Page 15]
-
-Internet-Draft              IMA for NFS Files               October 2019
-
 
 8.  IANA Considerations
 
@@ -888,14 +893,9 @@ Internet-Draft              IMA for NFS Files               October 2019
 
 
 
-
-
-
-
-
-Lever                     Expires April 3, 2020                [Page 16]
+Lever                    Expires October 5, 2020               [Page 16]
 
-Internet-Draft              IMA for NFS Files               October 2019
+Internet-Draft              IMA for NFS Files                 April 2020
 
 
 9.2.  Informative References
@@ -949,13 +949,13 @@ Acknowledgments
 
 
 
-Lever                     Expires April 3, 2020                [Page 17]
+Lever                    Expires October 5, 2020               [Page 17]
 
-Internet-Draft              IMA for NFS Files               October 2019
+Internet-Draft              IMA for NFS Files                 April 2020
 
 
    Special thanks go to Transport Area Director Magnus Westerlund, NFSV4
-   Working Group Chairs Spencer Shepler and Brian Pawlowski, and NFSV4
+   Working Group Chairs Dave Noveck and Brian Pawlowski, and NFSV4
    Working Group Secretary Thomas Haynes for their support.
 
 Author's Address
@@ -1005,4 +1005,4 @@ Author's Address
 
 
 
-Lever                     Expires April 3, 2020                [Page 18]
+Lever                    Expires October 5, 2020               [Page 18]
