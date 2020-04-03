@@ -937,13 +937,14 @@ the client's own IMA policies can be applied.
 
 </section>
 
-<!-- RFC Editor:
-Please remove the following section and the reference to RFC 7942
-before this document is published.
--->
 <section
  title="Implementation Status"
  anchor="section:887D5902-4FF5-44F3-AA9C-FE0E6485A53E">
+<t>
+RFC Editor:
+Please remove this section and the reference to RFC 7942
+before this document is published.
+</t>
 <t>
 This section records the status of known implementations of the
 protocol defined by this specification at the time of posting of
@@ -997,8 +998,8 @@ No comments from implementors.
  anchor="section:83D5C960-0148-42FA-93E4-3DE7F96EFD34">
 <t>
 The design of the NFS extension described in this document assumes
-that all IMA metadata is cryptographically signed
-to prevent unwanted alteration at rest or in transit.
+that IMA metadata in transit and at rest is cryptographically signed
+to prevent unwanted alteration.
 </t>
 <t>
 When IMA metadata for a file exists and the end host has an active appraiser,
@@ -1107,7 +1108,7 @@ script used in this document.
 <t>
 Special thanks go to
 Transport Area Director Magnus Westerlund,
-NFSV4 Working Group Chairs Spencer Shepler and Brian Pawlowski,
+NFSV4 Working Group Chairs Dave Noveck and Brian Pawlowski,
 and
 NFSV4 Working Group Secretary Thomas Haynes
 for their support.
