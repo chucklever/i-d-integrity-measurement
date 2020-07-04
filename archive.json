@@ -1,0 +1,281 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2020-07-04T17:42:32.858602+00:00",
+  "repo": "chucklever/i-d-integrity-measurement",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "MDU6SXNzdWU0OTY4MjQ0Mzc=",
+      "title": "Ensure the terms \"checksum\" and \"hash\" are used correctly",
+      "url": "https://github.com/chucklever/i-d-integrity-measurement/issues/1",
+      "state": "CLOSED",
+      "author": "chucklever",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "chucklever"
+      ],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "Michael Halcrow pointed out to me that a checksum is used to detect (and possibly correct) a few flipped bits, but a hash is used to detect malicious behavior. The draft needs to use these terms appropriately.",
+      "createdAt": "2019-09-22T19:51:54Z",
+      "updatedAt": "2019-09-22T20:34:06Z",
+      "closedAt": "2019-09-22T20:34:06Z",
+      "comments": [
+        {
+          "author": "chucklever",
+          "authorAssociation": "OWNER",
+          "body": "There was one use of the term \"checksum\" in the document, and it was appropriately used. I added a paragraph that explained the distinction between checksum, hash, and cryptographically-signed hash.",
+          "createdAt": "2019-09-22T20:34:06Z",
+          "updatedAt": "2019-09-22T20:34:06Z"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "MDU6SXNzdWU0OTY4MjQ2NDM=",
+      "title": "Add an illustrative use case to the Introduction",
+      "url": "https://github.com/chucklever/i-d-integrity-measurement/issues/2",
+      "state": "CLOSED",
+      "author": "chucklever",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "chucklever"
+      ],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "I constructed a use case for my presentations (at IETF 105 and the Linux Security Symposium) that seemed to help audience members grasp the work. Add a cleaned-up English description of this use case to the document's Introduction.",
+      "createdAt": "2019-09-22T19:53:46Z",
+      "updatedAt": "2019-09-22T20:56:28Z",
+      "closedAt": "2019-09-22T20:56:28Z",
+      "comments": []
+    },
+    {
+      "number": 3,
+      "id": "MDU6SXNzdWU0OTY4MjQ4OTc=",
+      "title": "Describe legacy NFS server/client behavior",
+      "url": "https://github.com/chucklever/i-d-integrity-measurement/issues/3",
+      "state": "CLOSED",
+      "author": "chucklever",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "chucklever"
+      ],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "During IETF 105 it was suggested that a description of current (ie, unextended) behavior of Linux NFS clients and servers would be helpful to document. In particular, make it more clear how such implementations would interact with an implementation that supports the extensions described in the document.",
+      "createdAt": "2019-09-22T19:56:10Z",
+      "updatedAt": "2019-09-22T22:35:47Z",
+      "closedAt": "2019-09-22T22:35:47Z",
+      "comments": [
+        {
+          "author": "chucklever",
+          "authorAssociation": "OWNER",
+          "body": "This is basically all of Section 5 (in the current document). What I can do is adjust the terminology there so that it is clear which use case involves the legacy implementations.",
+          "createdAt": "2019-09-22T22:12:13Z",
+          "updatedAt": "2019-09-22T22:12:13Z"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "MDU6SXNzdWU0OTY4MjYxMDY=",
+      "title": "How the server authorizes updates of IMA metadata is implementation guidance",
+      "url": "https://github.com/chucklever/i-d-integrity-measurement/issues/4",
+      "state": "CLOSED",
+      "author": "chucklever",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "chucklever"
+      ],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "After discussion at the North American Linux Security Summit 2019, Mimi and I concluded that exactly how an NFS server would authorize an IMA update from an NFS client (ie, SETATTR(IMA)) would be discussed in the document as implementation guidance. This is because the details of authorization are implemented as a policy on Linux, so flexibility is required here. Interoperation does not rely on the particulars of how IMA updates are authorized: only the error code if the authorization fails is relevant.",
+      "createdAt": "2019-09-22T20:05:59Z",
+      "updatedAt": "2019-09-22T22:56:19Z",
+      "closedAt": "2019-09-22T22:56:19Z",
+      "comments": []
+    },
+    {
+      "number": 5,
+      "id": "MDU6SXNzdWU0OTY4MjY3OTU=",
+      "title": "Should a server permit access to files that fail a local integrity check?",
+      "url": "https://github.com/chucklever/i-d-integrity-measurement/issues/5",
+      "state": "CLOSED",
+      "author": "chucklever",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "chucklever"
+      ],
+      "labels": [
+        "enhancement",
+        "question"
+      ],
+      "body": "Current Linux NFS server behavior is to deny access to NFS clients that try to access a file that does not pass an integrity check on the server. The server responds with EACCES. I have argued that because the server and its clients can have different IMA policies, a participating client (ie one that has an operating IMA security module and policy) would want to make its own determination. Mimi's opinion is that its always the responsibility of storage not to hand out bits it knows to be corrupt.",
+      "createdAt": "2019-09-22T20:11:24Z",
+      "updatedAt": "2019-09-22T23:06:48Z",
+      "closedAt": "2019-09-22T23:06:48Z",
+      "comments": [
+        {
+          "author": "chucklever",
+          "authorAssociation": "OWNER",
+          "body": "One alternative is to allow the server to behave in either fashion, depending on its local IMA security policy. This option is available only when the server recognizes that the client supports FATTR4_IMA.",
+          "createdAt": "2019-09-22T22:57:48Z",
+          "updatedAt": "2019-09-22T22:57:48Z"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "MDU6SXNzdWU0OTc3ODM4OTc=",
+      "title": "Objections to Section 4.3.2 of integration-measurement-06",
+      "url": "https://github.com/chucklever/i-d-integrity-measurement/issues/6",
+      "state": "CLOSED",
+      "author": "chucklever",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "chucklever"
+      ],
+      "labels": [
+        "bug"
+      ],
+      "body": ">   An NFS version 4.2 server needs to ensure that modifications to IMA\r\n>   metadata are done only by appropriately authorized agents. \r\n\r\nThat's true but it is very difficult to do when there is no definition of \"appropriately authorized agents\" \r\n\r\n>   Although\r\n>   access to file content is typically controlled by ACLs and permission\r\n>   bits, these mechanisms do not apply to IMA metadata.\r\n\r\nFirst of all no reason is given as to why this is so.   Note that:\r\n* These are the mechanisms used throughout the NFSv4 protocols so it would seem that the variance would call for some explanation.\r\n* Allowing independent decisions about  whether to allow a write to a file and when to allow setting its IMa metadata allows the possibility that someone will mliciously set the IMA Metadata.   While the cryptographic nature of the signature prevents signing of an inappropriately modified file, the possibility exists that a malicious actor could cause a denial of service by storing an inappropriate/invalid signature.\r\n* It is unclear whether the phrase 'these mechanisms do not apply\" is intemded normatively ot not.   If it isn't, then there is no nornative guidance on this point whatever.  On the other hand, if it is normative, then it is bizarre that the one factor that the server is not allowed to consider in deciding whether this is being done by an \"appropriately authorized agent\" is one that everyone else in NFSv4 uses to make these sorts of decisions.\r\n\r\n>   The question of \"who is authorized to modify IMA metadata\" is often\r\n>   left to the server's local IMA security policy. \r\n\r\nPerhaps so, but without information about such security policies, this isn't all that helpful.\r\n\r\n>   In addition, the\r\n>   issue of whether to allow a particular IMA metadata update has no\r\n>   bearing on protocol interoperability, as long as the server sticks to\r\n>   returning NFS4ERR_ACCESS or NFS4ERR_INTEGRITY, as appropriate. \r\n\r\nI don't agree.   If the client tries to do an operation and is not allowed to do it, then you have an instance of inter-non-operability :-(   Also, if the client has no indication of why this failed (wrong user, wrong client, wrong something else) there is no way to decide how to work around the failure.\r\n\r\n>   Thus,\r\n>   to enable server implementation flexibility, \r\n\r\nIt has to be recognized that server flexibility is not an unalloyed good, and that in granting such a large degree of fleixibility (almost unbounded) to the server, you basicallly undercut the value of defining a protocol, to provide interoperability. \r\n\r\n>   the current document\r\n>   treats the following recommendations as implementation guidance\r\n>   rather than as normative protocol requirements.\r\n\r\nIf these are not normative requirements, then there are no normatve requirements and I don't see how you can get by saying essentially that the server is free to accept or reject requests as it chooses.\r\nAlso, although the word \"recommendations\" is used, ther are no actual recommendations to make any particular choice as better than another.  As to \"implementation guidance\" what is the implemenation being guided to do?\r\n\r\n>   Possible NFS server implementations include limiting IMA metadata\r\n>   update authority in the following ways:\r\n\r\nThe use of the word \"include\" suggests that other ways are allowed/recommended or part of what  you are guiding the server to do.   These include some silly ones (e.g. do not allow the change of ima metadata in a month that does not include an \"r\") and some that are not silly at all (e.g. do not allow the change of IMA metdata when done by an unauthenticated client using AUTH_SYS).\r\n\r\n>   Particular users\r\n>      A server might allow IMA metadata updates only by UID 0 or by a\r\n>      client's machine principal.\r\n\r\nIf applied to an AUTH_SYS client, this constitutes a glaring security hole.  I think this would be Ok, for non-auth-sys as long as NFS4ERR_WRONGSEC is returned if AUTH_SYS is used.\r\n\r\n>   Particular clients\r\n>      A server might allow IMA metadata updates only from specific\r\n>      client IP addresses.\r\n\r\nSince the source IP addresses can be spoofed, the value of this is limited.\r\n\r\n>   File owners\r\n>      A server might allow IMA metadata updates only by the file's owner\r\n>      or group owner.\r\n\r\nI think this would be OK, as long NFS4ERR_PERM is returned when the owner is wrong.\r\n\r\n>   No remote updates\r\n>      A server might always return NFS4ERR_ACCESS when an NFS client\r\n>      sends a SETATTR request that updates IMA metadata.\r\n\r\nIf a server is not allowing SETATTR of this attribute, it is really treating this as a get-only attribute, in which case NFS4ERR_INVAL would be the appropriate error to return.\r\nSince each of the above clearly has ann existing constituency, making intra-community comporomise difficult to achieve, let me try to articulate my bottom line:\r\n* If we have to live with these four approaches, then OK :-( but I don't think we can live with an infinite number of possible approaches.\r\n* These restrctions have to be in addition to the ability to write the file in question, rather than as a potential replacement.\r\n* It needs to be clear why a request was rejected, either due to a distinct error code or some sort of fs-wide policy attribute.\r\n* If there are existing servers that do something bogus (e.g. accept an AUTH_SYS uid zero as determinative), then that fact can be noted but we should not recommened or in any way guide implementations to adopt such dubious practices.",
+      "createdAt": "2019-09-24T16:04:59Z",
+      "updatedAt": "2019-10-01T14:04:38Z",
+      "closedAt": "2019-10-01T14:04:38Z",
+      "comments": [
+        {
+          "author": "chucklever",
+          "authorAssociation": "OWNER",
+          "body": "From RFC 5661:\r\n\r\n### 5.5.  Set-Only and Get-Only Attributes\r\n>   Some REQUIRED and RECOMMENDED attributes are set-only; i.e., they can\r\n>   be set via SETATTR but not retrieved via GETATTR.  Similarly, some\r\n>   REQUIRED and RECOMMENDED attributes are get-only; i.e., they can be\r\n>   retrieved via GETATTR but not set via SETATTR.  If a client attempts\r\n>   to set a get-only attribute or get a set-only attributes, the server\r\n>   MUST return NFS4ERR_INVAL.\r\n\r\n### 15.1.6.1.  NFS4ERR_ACCESS (Error Code 13)\r\n>   Indicates permission denied.  The caller does not have the correct\r\n>   permission to perform the requested operation.  Contrast this with\r\n>   NFS4ERR_PERM (Section 15.1.6.2), which restricts itself to owner or\r\n>   privileged-user permission failures, and NFS4ERR_WRONG_CRED\r\n>   (Section 15.1.6.4), which deals with appropriate permission to delete\r\n>   or modify transient objects based on the credentials of the user that\r\n>   created them.\r\n\r\n### 15.1.6.2.  NFS4ERR_PERM (Error Code 1)\r\n>   Indicates requester is not the owner.  The operation was not allowed\r\n>   because the caller is neither a privileged user (root) nor the owner\r\n>   of the target of the operation.\r\n\r\n### 15.1.6.3.  NFS4ERR_WRONGSEC (Error Code 10016)\r\n>   Indicates that the security mechanism being used by the client for\r\n>   the operation does not match the server\u2019s security policy.  The\r\n>   client should change the security mechanism being used and re-send\r\n>   the operation (but not with the same slot ID and sequence ID; one or\r\n>   both MUST be different on the re-send).  SECINFO and SECINFO_NO_NAME\r\n>   can be used to determine the appropriate mechanism.\r\n\r\nThe SETATTR operation is permitted to return:\r\n\r\nNFS4ERR_ACCESS, NFS4ERR_ADMIN_REVOKED, NFS4ERR_ATTRNOTSUPP, NFS4ERR_BADCHAR,  NFS4ERR_BADOWNER, NFS4ERR_BADXDR, NFS4ERR_BAD_STATEID, NFS4ERR_DEADSESSION, NFS4ERR_DELAY, NFS4ERR_DELEG_REVOKED, NFS4ERR_DQUOT, NFS4ERR_EXPIRED, NFS4ERR_FBIG, NFS4ERR_FHEXPIRED, NFS4ERR_GRACE, NFS4ERR_INVAL, NFS4ERR_IO, NFS4ERR_LOCKED, NFS4ERR_MOVED, NFS4ERR_NOFILEHANDLE, NFS4ERR_NOSPC, NFS4ERR_OLD_STATEID, NFS4ERR_OPENMODE, NFS4ERR_OP_NOT_IN_SESSION, NFS4ERR_PERM, NFS4ERR_REP_TOO_BIG, NFS4ERR_REP_TOO_BIG_TO_CACHE, NFS4ERR_REQ_TOO_BIG, NFS4ERR_RETRY_UNCACHED_REP, NFS4ERR_ROFS, NFS4ERR_SERVERFAULT, NFS4ERR_STALE, NFS4ERR_TOO_MANY_OPS, NFS4ERR_UNKNOWN_LAYOUTTYPE, NFS4ERR_WRONG_TYPE\r\n\r\nINVAL, ACCESS, and PERM are all permitted status codes, but WRONGSEC is not. In this case, I think allowing IMA metadata updates when the file content is writable, without any further adornment, is an adequate baseline.\r\n\r\n\r\n",
+          "createdAt": "2019-09-24T17:01:22Z",
+          "updatedAt": "2019-09-24T17:18:33Z"
+        },
+        {
+          "author": "chucklever",
+          "authorAssociation": "OWNER",
+          "body": "Possible alternative approach:\r\n\r\n> Typically, an NFS server allows a user to update IMA metadata whenever the user is permitted to modify the file's content. This is consistent with similar mechanisms already used throughout the NFS protocol.\r\n> \r\n> If the user is not permitted to update the IMA metadata, SETATTR(FATTR4_IMA) MUST return NFS4ERR_PERM.\r\n> \r\n> If the NFS server implementation does not support remote modification of IMA metadata, SETATTR(FATTR4_IMA) MUST return NFS4ERR_INVAL.",
+          "createdAt": "2019-09-25T16:01:52Z",
+          "updatedAt": "2019-09-25T16:01:52Z"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "MDU6SXNzdWU1MTQ5ODIzNTA=",
+      "title": "Spencer Shepler's review of draft-ietf-nfsv4-integrity-measurement-07",
+      "url": "https://github.com/chucklever/i-d-integrity-measurement/issues/7",
+      "state": "OPEN",
+      "author": "chucklever",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "chucklever"
+      ],
+      "labels": [
+        "bug",
+        "enhancement"
+      ],
+      "body": "Feedback and comments on the draft \u201cIntegrity Measurement for Network File System version 4\u201d - draft-ietf-nfsv4-integrity-measurement-07.\r\n\r\n \r\n\r\nNote that these comments are personal contribution and do not reflect my position as working group co-chair.\r\n\r\nIn short, I am opposed to moving this draft to last call in its current state.  Generally, the draft describes the Linux implementation of a feature that is to be extended via NFS.  However, the description provided is insufficient for interoperable implementations to be achieved.\r\n\r\nThere are two options, in my opinion, to moving this document forward:\r\n\r\n1)  Limit the description to the addition of the new, opaque attribute and corresponding errors that can be returned as a result of the interpretation of that attribute.\r\n\r\n2)  Fully define the contents of the new attribute such that independent implementations can be achieved. This would include, but is not limited to, the open definition of the content of the new attribute and the procedures associated with defining new content and interpretation thereof.\r\n\r\nIf option 1) were chosen, I would still be of the opinion that the draft should not move forward since it would present another barrier to open, interoperable implementations.\r\n\r\nNote that I am also doubtful of the use case being presented. Using NFS to directly store and supply application executables seems to be in rapid decline or has already fallen out of use.  Given the rise of virtualization and the hosting of virtual disks on NFS along with the rise of containers and distribution thereof, application distribution seems to be a thing of the past with respect to their store/retrieval from NFS mounts.\r\n\r\nIf the effort was more focused on more traditional data integrity from source to consumption, that would be a more interesting use case.  With the rise of large scale data center usage of NFS (e.g. cloud computing) where customers expect data integrity or the identification of failure, the scale of cloud computing presents many opportunities for the loss of data integrity and NFS (and the client and server implementations thereof) do nothing to ensure data integrity.  The draft does mention spot fixes of data-at-rest methods, and in-transit methods, but there are many points that present areas of potential failure, and these are ignored in today\u2019s implementations (at least to this commenter's knowledge).",
+      "createdAt": "2019-10-30T21:06:02Z",
+      "updatedAt": "2019-11-08T16:23:38Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "chucklever",
+          "authorAssociation": "OWNER",
+          "body": "Some fall-out from resulting conversation:\r\n* Better title would be \"Transport and Storage of Linux Integrity Metadata\"\r\n* Should state explicitly that the IM architecture does not trust data storage, therefore measurement and appraisal is handled separately from filesystems.\r\n* Document should note that the proposed protocol extension does not enable the construction of an appraisal module; only the transport and storage of the metadata as an opaque blob.\r\n* Despite the narrow focus of this document, there is still some desire to see a specific definition of the metadata format. I proposed adding an Appendix that provides an Informative description of the main formats used today, in lieu of a more complete and standard definition provided in some other venue.",
+          "createdAt": "2019-10-30T21:09:47Z",
+          "updatedAt": "2019-10-30T21:09:47Z"
+        },
+        {
+          "author": "chucklever",
+          "authorAssociation": "OWNER",
+          "body": "Spencer's follow-up:\r\n\r\nI agree that RFC 8178 provides the ability to add features, particularly attributes, to the protocol and I agree with the utility of 8178 and that is appropriate.\r\n\r\nI also agree with the utility of RFC 8276 but I disagree with the interpreted precedent of the RFC per Chuck's comment.\r\n\r\nTo quote from RFC 8276:\r\n\r\n\"Xattr keys and values MUST NOT be interpreted\r\nby the NFS clients and servers, as such behavior would lead to\r\nnon-interoperable implementations.  If there were a need to specify\r\none or more attributes that servers need to act upon, the appropriate\r\nsemantics would be specified by adding a new attribute for the\r\npurpose as provided for by [RFC5661] and [RFC8178].\"\r\n\r\nI read the proposed integrity measurement capability as providing a \"system-level\" interpretation.  \r\n\r\nThe decision to allow for the execution of application binaries is a \"system\" level activity or in other words, a feature that explicitly requires the client to interpret the semantics of the protocol extension.  Because of the client's need to interpret the capability, the definition should be defined in a way that it can be implemented in an open fashion and hopefully, but not required, defined in a way that it is \"upgradeable\".\r\n\r\nTo the point of \"open\", I don't believe the availability of open source sufficient in this instance.  Yes, a clean-room approach to implementation can be executed but even with that action, a patent claim can still be made.  Therefore, without the protocol definition being captured in a way that clearly allows the reader to have a sense that IETF's policies for disclosure have followed, I don't believe it should be allowed as an extension of the NFS protocol.\r\n\r\nSo, I am left with my objection to this work moving forward.\r\n\r\nIf this proposal would to be accepted, it sets a precedent that a individual could define a similar extension for their favorite XYZ product in such a way that interoperable implementations could be not implemented.  In least this could lead to a proliferation of OS, vendor specific feature creep and at worse, non IP infringing implementations would be impossible to implement.",
+          "createdAt": "2019-11-08T16:22:16Z",
+          "updatedAt": "2019-11-08T16:22:16Z"
+        },
+        {
+          "author": "chucklever",
+          "authorAssociation": "OWNER",
+          "body": "Dave's response:\r\n\r\n> Why isn't the SELinux label work a problem in this regard?  \r\n\r\nI don't understand Spencer's position well  enough to know if he has\r\na problem with this, but given that this model has already been adopted\r\nby the working group for arguably system-level attributes, it is hard for\r\nme to believe such objections, if they were to exist, would be widely \r\nshared.  \r\n\r\nSince adopting a parallel approach for the IMA metadata \r\nformat is compatible with your plans for -08, perhaps you should \r\nadopt a similar approach (an IANA registry with a specification-required \r\npolicy) for IMA.   I know that such things have been suggested in the past \r\nand seemed at the time like overkill, but, given that there are a number \r\nof existing formats, and likely there will be a more general format which \r\nhas not been arrived at  right now, it might be best to take this step,\r\nhoping that it will deal with the objections about the lack of a metadata \r\nformat specification even though the Linux community is kind of slow\r\nabout producing  one.  I think you ould have to add a new fs-scope\r\nattribute with the id, rather than stick with the local-policy approach,\r\nbut there would b no requirement tat the client check this.\r\n\r\nBTW, specification-required and even RFC-required do not require a\r\nnormative specification.   With specification-required, the IETF does \r\nnot have to be involved in writing the spec although a designated-expert \r\nwould have to check that it clear enough to enable implementation.",
+          "createdAt": "2019-11-08T16:22:56Z",
+          "updatedAt": "2019-11-08T16:22:56Z"
+        },
+        {
+          "author": "chucklever",
+          "authorAssociation": "OWNER",
+          "body": "My conclusion?\r\n\r\nIt appears that draft-ietf-nfsv4-integrity-measurement can't move forward without some description of the IMA metadata format.\r\n\r\nMy preference would be that the Linux community is responsible for the process and document(s) that describe their own format. Failing that, a description can be added to integrity-measurement, as I recently proposed.\r\n\r\nTo make an IANA registry a sensible thing to do, at least one more independent integrity metadata format will have to be identified.\r\n\r\nI will see what can be done.",
+          "createdAt": "2019-11-08T16:23:38Z",
+          "updatedAt": "2019-11-08T16:23:38Z"
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "id": "MDU6SXNzdWU1MTcyMTU1MDM=",
+      "title": "Dave Noveck's review of draft-ietf-nfsv4-integrity-measurement-07",
+      "url": "https://github.com/chucklever/i-d-integrity-measurement/issues/8",
+      "state": "OPEN",
+      "author": "chucklever",
+      "authorAssociation": "OWNER",
+      "assignees": [
+        "chucklever"
+      ],
+      "labels": [
+        "bug",
+        "enhancement"
+      ],
+      "body": "General Comments\r\n\r\nOverall Evaluation\r\n\r\nThis document is in good shape and I feel it is ready for Working Group Last Call.  While I note some potential improvements below in Per-section Comments, I feel these changes could reasonably be made as part of last call rather then needing to be be done before that time.  However, if there are plans for a -08, I feel it would simplify things if some of the suggestions made here were considered for inclusion in -08 \r\n\r\nPossible Overuse of the Word \"MUST\"\r\n\r\nI feel that the use of \"MUST\" within this document is not in accord with the advice given in RFC2119 that these terms be used \"sparingly\".   Although I haven't looked at each such use, where I suggest rewriting  for other reasons, I would only use \"MUST\" where there is a special reason to do so.\r\n \r\nIssues Related to Documentation of IMA Metadata Format\r\n\r\nThere has been a lot of discussion/comment on the mailing list regarding the fact this format is not documented in this draft.  Some of the suggestions made in Per-section Comments are intended to make it clearer why this has not been done.  While I feel this would be helpful, I have no expectation it will resolve the objections that have been expressed, which I don't fully understand.\r\n\r\nWhile I do not think that this issue should pose any obstacle to publication, it might make it hard for the working group to arrive at a consensus for publication.  Nevertheless, I feel we need to move to WGLC and try to resolve the issue in that context, as I feel that discussion on the list so far has not been all that helpful.\r\n\r\nPer-section Comments\r\n\r\nAbstract\r\n\r\nSuggest addition of the following sentence: \"The format of the IMA Metadata is not described in this document.\"\r\n\r\n1.1. The Linux Integrity Measurement Architecture\r\n\r\nIn the first paragraph, suggest replacement of the phrase \"local tinkering\" by \"other local modifications\"\r\n\r\n1.1.1. IMA Metadata\r\n\r\nThe last paragraph of this section, while a correct description of the current situation may give readers pause since it suggests the possibility of an interoprerability nightmare.   Even though such a scenario is, strictly speaking, out of scope, I believe it would be helpful to assure people that steps are being taken to avoid it, even though those steps are being taken by others.   For that reason, I am proposing replacing that parapraph by the following two paragraphs.\r\n\r\nThe precise format of this metadata is currently determined by policies set by the local security administrator.  The metadata and its format are opaque to the mechanisms that store or transport it (i.e. filesystems). The particulars of the PKI and the hash algorithm are set by local policy.   In order to provide interoperability, there is a need to provide agreement on these matters by an out-of-band mechanism so that the IMA data can be recorgnized by all participating IMA subsystems.\r\n\r\nThe difficulties which arise when multiple formats are supported makes it likely that a sinlgle format will be arrived at, avoiding the need for an out-of-band agreement mechanism.   However the details of that format and the means by which it will standardized remain uncertain at this tiime.  \r\n\r\n3. Protocol Extension Considerations\r\n\r\nIn the last clause of the last sentence of the last paragraph suggest replacing \"does not update [RFC7862] or [RFC7863]\" by \"updates neither [RFC7862] nor [RFC7863]\" \r\n\r\n4.1.1. NFS4ERR_INTEGRITY (Error Code YYYYY)\r\n\r\nSuggest that the following additional paragraph be added to this section:\r\n\r\nThis error provides a means by which servers which implement an internal apprasal mechanism may communicate to the client the fact that an appraisal failure occurred, causing the requested operarion not be be performed. \r\n\r\n4.2.1. Reporting Server-Side IMA Appraisal Failures\r\n\r\nSuggest rewriting the first paragraph to read as follows:\r\n\r\nAn NFS server that implements an internal appraisal mechanism needs to be able to report integrity-related failures to clients. In the absense of the NFS4ERR_INTEGRITY error, described in Section 1.1,1, a server implementer would be forced choose choose one of the status codes that were available in the base NFS version 4.2 protocol, typically NFS4ERR_IO or NFS4ERR_ACCESS, even though these code points have generic meanings that do iindicate an integrity-related failure.\r\n\r\n4.3.2. Authorizing Updates to IMA Metadata\r\n\r\nAs written, the second pragraph, does not make any provision for the possibility that update of IMA Metadata would be supported for some but not all of the file system on a particular server.   If it is desirable to allow this possibility suggest rewriting this paragraph as follows: \r\n\r\nIf an NFS server implementation does not support modification of IMA metadata via NFS within a particular file system, the server returns NFS4ERR_INVAL to a SETATTR request within that file systen with the FATTR4_IMA attribute, as specified by Section 5.5 of [RFC5661].\r\n\r\n4.5. Using NFS Attribute Fencing (VERIFY/NVERIFY)\r\n\r\nSuggest rewriting the second paragraph as follows:\r\n\r\nWhen implementing these operations, the server is to use a simple byte-by-byte comparison to evaluate whether the client-provided FATTR4_IMA matches the FATTR4_IMA attribute associated with the target object. If the server has a local IMA appraisal implementation, its failure MAY prevent the use of the local FATTR4_IMA attribute value for the purpose of this comparison. In the event that this happens, the appraisal failure is indicated by returing  NFS4ERR_INTEGRITY if the client has indicated support for IMA metadata, with NFS4ERR_ACCESS used otherwise.\r\n\r\n8. IANA Considerations\r\n\r\nSuggest replacing \"has no\" by \"does not require any\"",
+      "createdAt": "2019-11-04T15:10:37Z",
+      "updatedAt": "2019-11-04T15:10:37Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": []
+}
